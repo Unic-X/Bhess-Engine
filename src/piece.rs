@@ -4,7 +4,6 @@ pub enum Color{
 }
 
 
-
 struct Position{
     x:u32,
     y:u32
@@ -19,7 +18,6 @@ pub struct About{
 pub enum Piece {
     Pawn(About),
     Knight(About),
-    Bishop(About),
     Rook(About),
     Queen(About),
     King(About),
