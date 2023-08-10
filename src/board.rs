@@ -1,10 +1,17 @@
 use std::ops::Shl;
 
 macro_rules! set_bit {
-     ($square:expr,$bitboard:expr) => {
-           let mut bitboard:u64 = 0; 
-            bitboard |=  1<< square; 
+     ($squares:expr) => {
+         { 
+        let mut bitboard:u64 = 0; 
+         for square in $squares {
+            bitboard |=  1<< *square;          
+         }
+         bitboard 
+         } 
     };
+
+
 
 }
 macro_rules! get_bit {
@@ -35,10 +42,11 @@ impl Shl<Squares> for u64 {
         }
 }
 
-pub fn display(square:Squares) {
-    let mut bitboard:u64 = 0; 
-    bitboard |=  1<< square; 
+pub fn display(squares:&[Squares]) {
+    /*let mut bitboard:u64 = 0; 
+    bitboard |=  1<< square;*/ 
     //loop over ranks
+    let bitboard = set_bit!(squares); 
     for rank in 0..8 {
         for file in 0..8 {
             //Use ranks and file to convert into Square number
