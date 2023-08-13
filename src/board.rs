@@ -20,10 +20,16 @@ macro_rules! set_bit {
     };
 
 
-
-/*macro_rules! pop_bit {
-    () => {}
-}*/
+}
+macro_rules! pop_bit {
+    ($square:expr,mut $bitboard:expr) => {
+        match get_bit!($square,$bitboard) {
+            1 => $bitboard^=(1<<$square),
+            _ => {
+            },
+        };
+    
+}
 
 }
 macro_rules! get_bit {
@@ -54,14 +60,8 @@ impl Shl<Squares> for u64 {
             self << square as u8
         }
 }
-
-pub fn display(squares:&[Squares]) {
-    /*let mut bitboard:u64 = 0; 
-    bitboard |=  1<< square;*/ 
-    //loop over ranks
-    let mut bitboard:u64= 2;
-    bitboard = set_bit!(squares,mut bitboard); 
-    for rank in 0..8 {
+fn render(bitboard:u64){
+ for rank in 0..8 {
         for file in 0..8 {
             //Use ranks and file to convert into Square number
             let square = rank * 8 + file;
@@ -82,5 +82,15 @@ pub fn display(squares:&[Squares]) {
     
     //Board state in u64 Decimal 
     print!("{bitboard} \n");
+}
+pub fn display(squares:&[Squares]) {
+    /*let mut bitboard:u64 = 0; 
+    bitboard |=  1<< square;*/ 
+    //loop over ranks
+    let mut bitboard:u64= 2;
+    set_bit!(squares,mut bitboard);
+    render(bitboard);
+    pop_bit!(Squares::e3,mut bitboard);
+    render(bitboard);
 
 }
