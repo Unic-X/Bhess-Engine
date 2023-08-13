@@ -10,15 +10,27 @@ macro_rules! set_bit {
          bitboard 
          } 
     };
+    ($squares:expr,mut $bitboard:expr)=>{
+         {
+         for square in $squares {
+            $bitboard |=  1<< *square;          
+         }
+         $bitboard 
+         } 
+    };
 
 
+
+/*macro_rules! pop_bit {
+    () => {}
+}*/
 
 }
 macro_rules! get_bit {
     ($square:expr,$bitboard:expr) => {
         match $bitboard & (1 << $square) {
-            0 => print!(" 0"),
-            _ => print!(" 1"),
+            0 => 0,
+            _ => 1,
         }
     };
 }
@@ -47,7 +59,8 @@ pub fn display(squares:&[Squares]) {
     /*let mut bitboard:u64 = 0; 
     bitboard |=  1<< square;*/ 
     //loop over ranks
-    let bitboard = set_bit!(squares); 
+    let mut bitboard:u64= 2;
+    bitboard = set_bit!(squares,mut bitboard); 
     for rank in 0..8 {
         for file in 0..8 {
             //Use ranks and file to convert into Square number
@@ -56,7 +69,7 @@ pub fn display(squares:&[Squares]) {
             if file == 0 {
                 print!(" {} ", 8 - rank);
             }
-            get_bit!(square, bitboard);
+            print!(" {}",get_bit!(square, bitboard));
 
             /*match bitboard & (1 << square) {
                 0 => print!("0"),
