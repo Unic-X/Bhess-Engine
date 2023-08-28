@@ -1,5 +1,7 @@
 use std::ops::Shl;
 
+#[macro_export]
+
 macro_rules! set_bit {
      ($squares:expr) => {
          { 
@@ -21,6 +23,9 @@ macro_rules! set_bit {
 
 
 }
+
+#[macro_export]
+
 macro_rules! pop_bit {
     ($square:expr,mut $bitboard:expr) => {
         match get_bit!($square,$bitboard) {
@@ -32,6 +37,9 @@ macro_rules! pop_bit {
 }
 
 }
+
+#[macro_export]
+
 macro_rules! get_bit {
     ($square:expr,$bitboard:expr) => {
         match $bitboard & (1 << $square) {
@@ -87,7 +95,7 @@ pub fn display(squares:&[Squares]) {
     /*let mut bitboard:u64 = 0; 
     bitboard |=  1<< square;*/ 
     //loop over ranks
-    let mut bitboard:u64= 2;
+    let mut bitboard:u64= 0;
     set_bit!(squares,mut bitboard);
     render(bitboard);
     pop_bit!(Squares::e3,mut bitboard);

@@ -4,10 +4,7 @@ use board::Squares;
 mod piece;
 
 fn main() {
-    let square1 = Squares::e2;
-    let square2 = Squares::e3;
-    let square3 = Squares::d1;
-    display(&[square1,square2,square3]);
+    display(&[Squares::a1,Squares::a2,Squares::a3,Squares::a4,Squares::a5,Squares::a6,Squares::a7,Squares::a8]);
     for rank in (1..9).rev() {
         println!("a{rank}, b{rank}, c{rank}, d{rank}, e{rank}, f{rank}, g{rank}, h{rank},  ")
     }
