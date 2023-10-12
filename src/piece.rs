@@ -1,16 +1,35 @@
 use crate::board::Squares;
-use crate::{board, set_bit};
+use crate::board::render;
+use crate::set_bit;
 
-enum Sides{
+pub enum Sides{
     White,
     Black,
 }
 
 
+pub fn main() {
+    mask_pawn(&[Squares::a3,Squares::b7], Sides::White,128);
 
+}
 
-fn mask_pawn(sq:Squares){
-    let attacks:u64 = 0;
-    let bitboard:u64 = 0;
-    set_bit!();
+pub fn mask_pawn(sq:&[Squares],side:Sides,mut bitboard:u64)->u64{
+    let mut attacks:u64 = 0;
+
+    set_bit!(sq,mut bitboard);
+
+    match side {
+        Sides::White=>{
+            attacks |= (bitboard<<7);
+            return attacks;
+        },
+        Sides::Black=>{
+    
+            attacks |= (bitboard<<7);
+            return attacks;
+            
+        }
+    
+    }
+
 }
