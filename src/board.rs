@@ -62,6 +62,7 @@ pub enum Squares {
     a1,b1,c1,d1,e1,f1,g1,h1,
 }
 
+
 impl Shl<Squares> for u64 {
         type Output = u64;
 

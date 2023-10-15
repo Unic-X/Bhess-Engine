@@ -17,34 +17,30 @@ pub const NOT_HG_FILE: u64 = 4557430888798830399;
 // not AB file constant
 pub const NOT_AB_FILE: u64 = 18229723555195321596;
 
+
+// Mask Pawn i.e every attack move for squares
 pub fn mask_pawn(sq: &[Squares], side: Sides, mut bitboard: u64) -> u64 {
     let mut attacks: u64 = 0;
 
-    set_bit!(sq, mut bitboard);
 
+    // CHANGE THE BITBOARD TO ADD EVERY SQUARE THAT HAS 
+    set_bit!(sq, mut bitboard);
+    // CHECK SIDE IF WHITE OR BLACK 
     match side {
         Sides::White => {
             if ((bitboard >> 7) & NOT_A_FILE) > 0 {
                 attacks |= bitboard >> 7;
-            } else {
-                return bitboard;
-            }
+            } 
             if ((bitboard >> 9) & NOT_H_FILE) > 0 {
                 attacks |= bitboard >> 9;
-            } else {
-                return bitboard;
             }
         }
         Sides::Black => {
             if ((bitboard << 7) & NOT_H_FILE) > 0 {
                 attacks |= bitboard << 7;
-            } else {
-                return bitboard;
             }
             if ((bitboard << 9) & NOT_A_FILE) > 0 {
                 attacks |= bitboard << 9;
-            } else {
-                return bitboard;
             }
         }
     }
@@ -116,3 +112,25 @@ pub fn mask_king(sq: &[Squares], mut bitboard: u64) -> u64 {
     };
     return attacks;
 }
+
+
+
+
+// Mask Pawn i.e every attack move for squares
+/*pub fn mask_bishop(sq: Squares, side: Sides, mut bitboard: u64) -> u64 {
+    let mut attacks: u64 = 0;
+    let tr = (sq as u8)  / 8;
+    let tf = (sq as u8) % 8;
+
+    let r=0;let f = 0;
+    while  {
+        unimplemented!();
+    }
+
+    for (r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++) attacks |= (1ULL << (r * 8 + f));
+    for (r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++) attacks |= (1ULL << (r * 8 + f));
+    for (r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--) attacks |= (1ULL << (r * 8 + f));
+    for (r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--) attacks |= (1ULL << (r * 8 + f));
+}*/
+
+
