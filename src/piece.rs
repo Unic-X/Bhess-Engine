@@ -117,20 +117,63 @@ pub fn mask_king(sq: &[Squares], mut bitboard: u64) -> u64 {
 
 
 // Mask Pawn i.e every attack move for squares
-/*pub fn mask_bishop(sq: Squares, side: Sides, mut bitboard: u64) -> u64 {
+pub fn mask_bishop(sq: Squares, mut bitboard: u64, block:u64) -> u64 {
     let mut attacks: u64 = 0;
     let tr = (sq as u8)  / 8;
     let tf = (sq as u8) % 8;
 
-    let r=0;let f = 0;
-    while  {
-        unimplemented!();
-    }
+    for &(dr, df) in &[(1, 1), (-1, 1), (1, -1), (-1, -1)] {
+        let mut r = i32::from(tr) + i32::from(dr);
+        let mut f = i32::from(tf) + i32::from(df);
 
-    for (r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++) attacks |= (1ULL << (r * 8 + f));
+        while r >= 1 && r <= 6 && f >= 1 && f <= 6 {
+            attacks |= 1u64 << (r as u64 * 8 + f as u64);
+          
+ if ((1u64<< (r*8+f))&block)>0{
+                break;
+            }
+            r += dr;
+            f += df;
+           
+        }
+    }    
+    attacks
+    /*for (r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++) attacks |= (1ULL << (r * 8 + f));
     for (r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++) attacks |= (1ULL << (r * 8 + f));
     for (r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--) attacks |= (1ULL << (r * 8 + f));
     for (r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--) attacks |= (1ULL << (r * 8 + f));
-}*/
+    */
+
+}
+
+
+pub fn mask_rook(sq: Squares, mut bitboard: u64) -> u64 {
+    let mut attacks: u64 = 0;
+    let tr = (sq as u8)  / 8;
+    let tf = (sq as u8) % 8;
+
+    for r in (tr + 1)..=6 {
+    attacks |= 1u64 << (u64::from(r) * 8 + u64::from(tf));
+}
+
+for r in (1..tr).rev() {
+    attacks |= 1u64 << (u64::from(r) * 8 + u64::from(tf));
+}
+
+for f in (tf + 1)..=6 {
+    attacks |= 1u64 << (u64::from(tr) * 8 + u64::from(f));
+}
+
+for f in 1..tf {
+    attacks |= 1u64 << (u64::from(tr) * 8 + u64::from(f));
+}
+    attacks
+    /*for (r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++) attacks |= (1ULL << (r * 8 + f));
+    for (r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++) attacks |= (1ULL << (r * 8 + f));
+    for (r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--) attacks |= (1ULL << (r * 8 + f));
+    for (r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--) attacks |= (1ULL << (r * 8 + f));
+    */
+
+}
 
 
