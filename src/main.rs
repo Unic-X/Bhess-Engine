@@ -1,12 +1,19 @@
+
+
 mod board;
 use board::display;
 use board::Squares;
+use utils::bit_count;
 mod piece;
+mod utils;
+
+#[allow(unused_variables)]
 
 fn main() {
 
+    let bitboard = 4624614895390720;
     display(&[Squares::h8]);
-    for rank in (1..9).rev() {
-        println!("a{rank}, b{rank}, c{rank}, d{rank}, e{rank}, f{rank}, g{rank}, h{rank},  ")
-    }
+    println!("{:?}",bit_count(bitboard));
 }
+
+

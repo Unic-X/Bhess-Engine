@@ -100,7 +100,5 @@ pub fn display(squares:&[Squares]) {
     let mut bitboard:u64= 0;
     set_bit!(squares,mut bitboard);
     render(bitboard);
-    pop_bit!(Squares::e3,mut bitboard);
-    render(bitboard);
 
 }
