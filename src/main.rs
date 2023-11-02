@@ -1,19 +1,20 @@
 
 
 mod board;
-use board::display;
-use board::Squares;
-use utils::bit_count;
+use crate::board::*;
+use crate::piece::*;
+use crate::utils::*;
 mod piece;
 mod utils;
 
 #[allow(unused_variables)]
 
 fn main() {
-
+    
     let bitboard = 4624614895390720;
-    display(&[Squares::h8]);
-    println!("{:?}",bit_count(bitboard));
+    render(bitboard);
+    
+    println!("{:?} {:?} {:?} ",bit_count(bitboard),Squares::e7 as u64,get_lsb(bitboard).unwrap());
 }
 
 
