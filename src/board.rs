@@ -91,7 +91,7 @@ pub fn render(bitboard:u64){
     print!("\n    a b c d e f g h \n");
     
     //Board state in u64 Decimal 
-    print!("{bitboard} \n");
+    print!("Biboard : {bitboard} \n");
 }
 pub fn display(squares:&[Squares]) {
     /*let mut bitboard:u64 = 0; 

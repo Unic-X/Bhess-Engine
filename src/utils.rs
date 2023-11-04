@@ -48,8 +48,29 @@ const ROOK_REVEVANT_BITS: [u8;64] = [
 ];
 
 
+
+pub fn get_random_64(state:u32)->u64{
+
+    //XOR SHIFT 32
+    let gen_rand_32=|mut number|{
+    number ^= number<<13;
+    number ^= number>>17;
+    number ^= number<<5;
+    
+    number
+    };
+    let n1 = gen_rand_32(state) as u64 & 0xFFFF;
+    let n2 = gen_rand_32(state) as u64 & 0xFFFF;
+    let n3 = gen_rand_32(state) as u64 & 0xFFFF;
+    let n4 = gen_rand_32(state) as u64 & 0xFFFF;
+
+    n1 | n2 << 16 | n3 << 32 | n4 << 48
+
+} 
+
+
 pub fn set_occupancy(index: u64, bits_in_mask: u32, attack_mask: u64) -> u64 {
-    let mut occupancy: u64 = 0;
+    let mut occupancy: u64 = 0; 
     let mut current_attack_mask = attack_mask;
 
     for count in 0..bits_in_mask {
