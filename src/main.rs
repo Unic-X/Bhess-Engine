@@ -11,7 +11,7 @@ mod utils;
 
 fn main() {
     let state = 1804289383; 
-    render(get_random_64(state) as u64);
+    render(mask_pawn(&[Squares::c6],Sides::Black,0));
 }
 
 

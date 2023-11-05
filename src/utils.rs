@@ -1,3 +1,8 @@
+use rand::prelude::*;
+
+use crate::{board::*, piece::*};
+
+
 
 #[inline]
 pub fn get_lsb(bitboard:u64) ->Option<u64> {
@@ -23,7 +28,6 @@ pub fn bit_count(bitboard:u64)->u64{
     count
 
 }
-
 const BISHOP_RELEVANT_BITS: [u8;64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 
     5, 5, 5, 5, 5, 5, 5, 5, 
@@ -49,28 +53,135 @@ const ROOK_REVEVANT_BITS: [u8;64] = [
 
 
 
-pub fn get_random_64(state:u32)->u64{
+pub fn get_random_64()->u64{
+    let n1 = random::<u64>() & 0xFFFF;
+    let n2 = random::<u64>() & 0xFFFF;
+    let n3 = random::<u64>() & 0xFFFF;
+    let n4 = random::<u64>() & 0xFFFF;
+   
+    n1 | (n2 << 16) | (n3 << 32) | (n4 <<48)
+}
 
-    //XOR SHIFT 32
-    let gen_rand_32=|mut number|{
-    number ^= number<<13;
-    number ^= number>>17;
-    number ^= number<<5;
+pub fn random_uint64_fewbits()->u64 {
+  get_random_64() & get_random_64() & get_random_64()
+}
+
+
+
+pub fn ratt(sq: u64, block: u64) -> u64 {
+    let mut result = 0;
+    let rk = (sq / 8) as u64;
+    let fl = (sq % 8) as u64;
+
+    for r in rk + 1..=7 {
+        let index = fl + r * 8;
+        result |= 1 << index;
+        if block & (1 << index) != 0 {
+            break;
+        }
+    }
+
+    for r in (0..rk).rev() {
+        let index = fl + r * 8;
+        result |= 1 << index;
+        if block & (1 << index) != 0 {
+            break;
+        }
+    }
+
+    for f in fl + 1..=7 {
+        let index = f + rk * 8;
+        result |= 1 << index;
+        if block & (1 << index) != 0 {
+            break;
+        }
+    }
+
+    for f in (0..fl).rev() {
+        let index = f + rk * 8;
+        result |= 1 << index;
+        if block & (1 << index) != 0 {
+            break;
+        }
+    }
+
+    result
+}
+
+pub fn batt(sq: u64, block: u64) -> u64 {
+    let mut result = 0;
+    let rk = (sq / 8) as u64;
+    let fl = (sq % 8) as u64;
+
+    for (r, f) in (rk + 1..=7).zip(fl + 1..=7) {
+        let index = f + r * 8;
+        result |= 1 << index;
+        if block & (1 << index) != 0 {
+            break;
+        }
+    }
+
+    for (r, f) in (rk + 1..=7).zip((0..fl).rev()) {
+        let index = f + r * 8;
+        result |= 1 << index;
+        if block & (1 << index) != 0 {
+            break;
+        }
+    }
+
+    for (r, f) in (0..rk).rev().zip(fl + 1..=7) {
+        let index = f + r * 8;
+        result |= 1 << index;
+        if block & (1 << index) != 0 {
+            break;
+        }
+    }
+
+    for (r, f) in (0..rk).rev().zip((0..fl).rev()) {
+        let index = f + r * 8;
+        result |= 1 << index;
+        if block & (1 << index) != 0 {
+            break;
+        }
+    }
+
+    result
+}
+
+
+pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
+    let mut occupancies:Vec<u64> = vec![0; 1 << 12];
+    let mut attacks:Vec<u64> = vec![0; 1 << 12];
+    let used_attacks:Vec<u64> = vec![0; 1 << 12];
+
+    let mask:u64;
+   
+    if is_bishop {
+        mask = mask_bishop(square, 0, 0);
+    }else {
+        mask = mask_rook(square, 0);
+    }
+    let n = bit_count(mask); 
+    for i in 0..(1 << n) {
+        occupancies[i] = set_occupancy(i as u64, relevent_bits, mask);
+        attacks[i] = if is_bishop { batt(square as u64, occupancies[i]) } else { ratt(square as u64, occupancies[i]) };
+    }
+
+    for _k in 0..100000000 {
+        let magic_number = random_uint64_fewbits();
+        if bit_count(mask*magic_number) & 0xFF00000000000000 < 6 {
+            println!("maa chuda");
+            continue;
+        }
+        
     
-    number
-    };
-    let n1 = gen_rand_32(state) as u64 & 0xFFFF;
-    let n2 = gen_rand_32(state) as u64 & 0xFFFF;
-    let n3 = gen_rand_32(state) as u64 & 0xFFFF;
-    let n4 = gen_rand_32(state) as u64 & 0xFFFF;
 
-    n1 | n2 << 16 | n3 << 32 | n4 << 48
+    }
+    return 1;
+}
 
-} 
-
-
-pub fn set_occupancy(index: u64, bits_in_mask: u32, attack_mask: u64) -> u64 {
-    let mut occupancy: u64 = 0; 
+pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
+    let mut occupancy: u64 = 0;
     let mut current_attack_mask = attack_mask;
 
     for count in 0..bits_in_mask {

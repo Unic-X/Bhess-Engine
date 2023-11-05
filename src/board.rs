@@ -44,12 +44,12 @@ macro_rules! pop_bit {
 macro_rules! get_bit {
     ($square:expr,$bitboard:expr) => {
         match $bitboard & (1 << $square) {
-            0 => 0,
-            _ => 1,
+            0 => ".",
+            _ => "1",
         }
     };
 }
-
+#[allow(non_camel_case_types)]
 #[derive(Copy, Clone,Debug)]
 pub enum Squares {
     a8,b8,c8,d8,e8,f8,g8,h8,

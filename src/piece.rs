@@ -112,7 +112,7 @@ pub fn mask_king(sq: &[Squares], mut bitboard: u64) -> u64 {
 }
 
 // Mask Pawn i.e every attack move for squares
-pub fn mask_bishop(sq: Squares, mut bitboard: u64, block: u64) -> u64 {
+pub fn mask_bishop(sq: Squares, bitboard: u64, block: u64) -> u64 {
     let mut attacks: u64 = 0;
     let tr = (sq as u8) / 8;
     let tf = (sq as u8) % 8;
