@@ -1,7 +1,8 @@
+
 use rand::prelude::*;
+use strum::IntoEnumIterator;
 
 use crate::{board::*, piece::*};
-
 
 
 #[inline]
@@ -150,34 +151,62 @@ pub fn batt(sq: u64, block: u64) -> u64 {
 
 
 pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
-    let mut occupancies:Vec<u64> = vec![0; 1 << 12];
-    let mut attacks:Vec<u64> = vec![0; 1 << 12];
-    let used_attacks:Vec<u64> = vec![0; 1 << 12];
+    let occupancy_index:usize= 1<<relevent_bits;
+    let mut occupancies:Vec<u64> = vec![0; occupancy_index as usize];
+    let mut attacks:Vec<u64> = vec![0;occupancy_index as usize];
+    let mut used_attacks:Vec<u64> = vec![0; occupancy_index as usize];
 
-    let mask:u64;
-   
-    if is_bishop {
-        mask = mask_bishop(square, 0, 0);
+    let mask:u64 = if is_bishop {
+        render(mask_bishop(square, 0,0));
+        mask_bishop(square, 0, 0)
     }else {
-        mask = mask_rook(square, 0);
-    }
-    let n = bit_count(mask); 
-    for i in 0..(1 << n) {
-        occupancies[i] = set_occupancy(i as u64, relevent_bits, mask);
-        attacks[i] = if is_bishop { batt(square as u64, occupancies[i]) } else { ratt(square as u64, occupancies[i]) };
+        render(mask_rook(square, 0));
+        mask_rook(square, 0)
+    };
+
+    for i in 0..occupancy_index {
+        occupancies[i as usize] = set_occupancy(i as u64, relevent_bits, mask);
+        attacks[i as usize] = if is_bishop { batt(square as u64, occupancies[i as usize]) } else { ratt(square as u64, occupancies[i as usize]) };
     }
 
-    for _k in 0..100000000 {
-        let magic_number = random_uint64_fewbits();
-        if bit_count(mask*magic_number) & 0xFF00000000000000 < 6 {
-            println!("maa chuda");
+    for _k in 0..100_000{ 
+        let magic_number = get_random_64();
+        if bit_count((mask.wrapping_mul(magic_number)) as u64) & 0xFF00000000000000 < 6 {
             continue;
         }
+        used_attacks.iter_mut().for_each(|a| *a=0);
         
-    
+        let mut fail = false;
+        for i in 0..occupancy_index {
+            let j= (occupancies[i].wrapping_mul(magic_number)>>(64-relevent_bits))as usize;
+            if used_attacks[j] == 0 {
+                used_attacks[j] = attacks[i];
+            } else if used_attacks[j] != attacks[i] {
+                fail = true;
+                break;
+            }
+
+        }
+        if !fail {
+            println!("{}",magic_number);
+            return magic_number;
+           
+        }
 
     }
-    return 1;
+    return 0;
+}
+
+
+pub fn init_magic(){
+    println!("BISHOP MAGIC NUMBERS:");
+    for square in Squares::iter(){
+       println!("{} ,",find_magic(square, BISHOP_RELEVANT_BITS[square as usize].into(), true)); 
+    }
+    println!("ROOK MAGIC NUMBERS:");
+    for square in Squares::iter(){
+       println!("{} ,",find_magic(square, ROOK_REVEVANT_BITS[square as usize].into(), false)); 
+    }
 }
 
 pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
