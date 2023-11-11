@@ -1,8 +1,6 @@
 
 
 mod board;
-use crate::board::*;
-use crate::piece::*;
 use crate::utils::*;
 mod piece;
 mod utils;
@@ -11,7 +9,9 @@ mod utils;
 
 fn main() {
     let state = 1804289383; 
-    render(mask_pawn(&[Squares::c6],Sides::Black,0));
+    init_magic();
+
+
 }
 
 
