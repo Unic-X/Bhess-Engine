@@ -157,10 +157,8 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
     let mut used_attacks:Vec<u64> = vec![0; occupancy_index as usize];
 
     let mask:u64 = if is_bishop {
-        render(mask_bishop(square, 0,0));
         mask_bishop(square, 0, 0)
     }else {
-        render(mask_rook(square, 0));
         mask_rook(square, 0)
     };
 
@@ -169,13 +167,12 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
         attacks[i as usize] = if is_bishop { batt(square as u64, occupancies[i as usize]) } else { ratt(square as u64, occupancies[i as usize]) };
     }
 
-    for _k in 0..100_000{ 
-        let magic_number = get_random_64();
-        if bit_count((mask.wrapping_mul(magic_number)) as u64) & 0xFF00000000000000 < 6 {
+    for _k in 0..10_000_000{ 
+        let magic_number = random_uint64_fewbits();
+        if bit_count(mask.wrapping_mul(magic_number) & 0xFF00000000000000 ) < 6 {
             continue;
         }
         used_attacks.iter_mut().for_each(|a| *a=0);
-        
         let mut fail = false;
         for i in 0..occupancy_index {
             let j= (occupancies[i].wrapping_mul(magic_number)>>(64-relevent_bits))as usize;
@@ -188,7 +185,6 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
 
         }
         if !fail {
-            println!("{}",magic_number);
             return magic_number;
            
         }
@@ -201,7 +197,7 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
 pub fn init_magic(){
     println!("BISHOP MAGIC NUMBERS:");
     for square in Squares::iter(){
-       println!("{} ,",find_magic(square, BISHOP_RELEVANT_BITS[square as usize].into(), true)); 
+         println!("{} ,",find_magic(square, BISHOP_RELEVANT_BITS[square as usize].into(), true)); 
     }
     println!("ROOK MAGIC NUMBERS:");
     for square in Squares::iter(){
