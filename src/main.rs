@@ -1,6 +1,9 @@
 
 
 mod board;
+use board::{render, Squares};
+use piece::*;
+
 use crate::utils::*;
 mod piece;
 mod utils;
@@ -8,10 +11,7 @@ mod utils;
 #[allow(unused_variables)]
 
 fn main() {
-    let state = 1804289383; 
-    init_magic();
-
-
+    render(mask_pawn(Squares::d4,Sides::White));
 }
 
 

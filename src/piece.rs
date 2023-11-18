@@ -18,97 +18,42 @@ pub const NOT_HG_FILE: u64 = 4557430888798830399;
 pub const NOT_AB_FILE: u64 = 18229723555195321596;
 
 // Mask Pawn i.e every attack move for squares
-pub fn mask_pawn(sq: &[Squares], side: Sides, mut bitboard: u64) -> u64 {
-    let mut attacks: u64 = 0;
+pub fn mask_pawn(sq: Squares, side: Sides) -> u64 {
+    let mut attacks = 1 << sq as u8;
 
     // CHANGE THE BITBOARD TO ADD EVERY SQUARE THAT HAS
-    set_bit!(sq, mut bitboard);
     // CHECK SIDE IF WHITE OR BLACK
     match side {
         Sides::White => {
-            if ((bitboard >> 7) & NOT_A_FILE) > 0 {
-                attacks |= bitboard >> 7;
-            }
-            if ((bitboard >> 9) & NOT_H_FILE) > 0 {
-                attacks |= bitboard >> 9;
-            }
+            return (attacks & NOT_A_FILE) >> 7 | (attacks & NOT_H_FILE) >> 9
         }
         Sides::Black => {
-            if ((bitboard << 7) & NOT_H_FILE) > 0 {
-                attacks |= bitboard << 7;
-            }
-            if ((bitboard << 9) & NOT_A_FILE) > 0 {
-                attacks |= bitboard << 9;
-            }
+            return (attacks & NOT_A_FILE) << 7 | (attacks & NOT_H_FILE) << 9
         }
     }
-    return attacks;
 }
 
-pub fn mask_knight(sq: &[Squares], mut bitboard: u64) -> u64 {
-    let mut attacks: u64 = 0;
-
-    set_bit!(sq, mut bitboard);
-    if ((bitboard >> 17) & NOT_H_FILE) > 0 {
-        attacks |= bitboard >> 17
-    };
-    if ((bitboard >> 15) & NOT_A_FILE) > 0 {
-        attacks |= bitboard >> 15
-    };
-    if ((bitboard >> 10) & NOT_HG_FILE) > 0 {
-        attacks |= bitboard >> 10
-    };
-    if ((bitboard >> 6) & NOT_AB_FILE) > 0 {
-        attacks |= bitboard >> 6
-    };
-    if ((bitboard << 17) & NOT_A_FILE) > 0 {
-        attacks |= bitboard << 17
-    };
-    if ((bitboard << 15) & NOT_H_FILE) > 0 {
-        attacks |= bitboard << 15
-    };
-    if ((bitboard << 10) & NOT_AB_FILE) > 0 {
-        attacks |= bitboard << 10
-    };
-    if ((bitboard << 6) & NOT_HG_FILE) > 0 {
-        attacks |= bitboard << 6
-    };
-    return attacks;
+pub fn mask_knight(sq: Squares) -> u64 {
+    let attacks = 1 << sq as u8;
+     (attacks & NOT_A_FILE) >> 17
+        | (attacks & NOT_A_FILE) << 15
+        | (attacks & NOT_H_FILE) >> 15
+        | (attacks & NOT_H_FILE) << 17
+        | (attacks & NOT_AB_FILE) >> 10
+        | (attacks & NOT_AB_FILE) << 6
+        | (attacks & NOT_HG_FILE) >> 6
+        | (attacks & NOT_HG_FILE) << 10
 }
 
-pub fn mask_king(sq: &[Squares], mut bitboard: u64) -> u64 {
-    let mut attacks: u64 = 0;
-
-    set_bit!(sq, mut bitboard);
-
-    if (bitboard >> 8) > 0 {
-        attacks |= bitboard >> 8
-    };
-
-    if ((bitboard >> 9) & NOT_H_FILE) > 0 {
-        attacks |= bitboard >> 9
-    };
-    if ((bitboard >> 7) & NOT_A_FILE) > 0 {
-        attacks |= bitboard >> 7
-    };
-    if ((bitboard >> 1) & NOT_H_FILE) > 0 {
-        attacks |= bitboard >> 1
-    };
-
-    if (bitboard << 8) > 0 {
-        attacks |= bitboard << 8
-    };
-
-    if ((bitboard << 9) & NOT_A_FILE) > 0 {
-        attacks |= bitboard << 9
-    };
-    if ((bitboard << 7) & NOT_H_FILE) > 0 {
-        attacks |= bitboard << 7
-    };
-    if ((bitboard << 1) & NOT_A_FILE) > 0 {
-        attacks |= bitboard << 1
-    };
-    return attacks;
+pub fn mask_king(sq: Squares) -> u64 {
+    let attacks = 1 << sq as u8;
+     (attacks >> 8 | attacks << 8)
+        | (attacks & NOT_A_FILE) >> 9
+        | (attacks & NOT_A_FILE) >> 1
+        | (attacks & NOT_A_FILE) << 7
+        | (attacks & NOT_H_FILE) >> 7
+        | (attacks & NOT_H_FILE) << 1
+        | (attacks & NOT_H_FILE) << 9
 }
 
 // Mask Pawn i.e every attack move for squares
