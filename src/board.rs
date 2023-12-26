@@ -1,12 +1,21 @@
 use std::ops::Shl;
 
-use strum::IntoEnumIterator; 
 
 use strum_macros::EnumIter;
 
-#[macro_export]
 
+///TODO impl these set_bit,pop_bit etc for the Board itself rather than a separate macro for it
+
+#[macro_export]
 macro_rules! set_bit {
+    ($square:expr) => {
+         { 
+        let mut bitboard:u64 = 0; 
+        bitboard |=  1<< $square;          
+         bitboard 
+         } 
+    };
+
      ($squares:expr) => {
          { 
         let mut bitboard:u64 = 0; 
@@ -17,7 +26,6 @@ macro_rules! set_bit {
          } 
     };
 
-
     ($squares:expr,mut $bitboard:expr)=>{
          {
          for square in $squares {
@@ -27,11 +35,9 @@ macro_rules! set_bit {
          } 
     };
 
-
 }
 
 #[macro_export]
-
 macro_rules! pop_bit {
     ($square:expr,mut $bitboard:expr) => {
         match get_bit!($square,$bitboard) {
@@ -98,12 +104,4 @@ pub fn render(bitboard:u64){
     //Board state in u64 Decimal 
     print!("Biboard : {bitboard} \n");
 }
-pub fn display(squares:&[Squares]) {
-    /*let mut bitboard:u64 = 0; 
-    bitboard |=  1<< square;*/ 
-    //loop over ranks
-    let mut bitboard:u64= 0;
-    set_bit!(squares,mut bitboard);
-    render(bitboard);
 
-}

@@ -4,31 +4,17 @@ use strum::IntoEnumIterator;
 
 use crate::{board::*, piece::*};
 
-
 #[inline]
 pub fn get_lsb(bitboard:u64) ->Option<u64> {
     
    if bitboard>0{
         let _x = bitboard as i64;
-        Some(bit_count((_x & -_x) as u64 - 1)) 
+        Some(u64::count_ones((_x & -_x) as u64 - 1) as u64) 
     }else{
         None
     } 
 }
 
-#[inline]
-pub fn bit_count(bitboard:u64)->u64{
-    
-    let mut a = bitboard;
-    let mut count:u64 = 0;
-    while a>0 {
-        count+=1;
-        a&=a-1;  
-    }  
-
-    count
-
-}
 const BISHOP_RELEVANT_BITS: [u8;64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 
     5, 5, 5, 5, 5, 5, 5, 5, 
@@ -110,76 +96,76 @@ const ROOK_MAGICS:[u64;64]= [
 
 
 const BISHOP_MAGIC:[u64;64] = [
-4620993457387995267 ,
-81242931576446976 ,
-2429972272644096 ,
-1162105194805481472 ,
-10156326495847432 ,
-2323302970867736 ,
-576752161828913152 ,
-140877215303684 ,
-18033142099608070 ,
-37393126402178 ,
-4616198422744137748 ,
-18402116120870912 ,
-2306973324900631104 ,
-3026420066830018562 ,
-9547913252493594664 ,
-1301540568329101312 ,
-2380227187577455104 ,
-1130306619315712 ,
-282033456808068 ,
-2314889799613350032 ,
-41095364318658560 ,
-3459328567586456064 ,
-2459106151355420672 ,
-221241677302536193 ,
-4612284187937083464 ,
-4508001029407746 ,
-2254001001464064 ,
-12948398818754562 ,
-281543712981001 ,
-5190857066994010752 ,
-2267193518134272 ,
-9799905357605143562 ,
-316865509397504 ,
-6917687391675549696 ,
-145139830884425 ,
-2918351284593754177 ,
-18015502316081216 ,
-45036326987268228 ,
-4794149870373120 ,
-3458909656133420544 ,
-24779163932042242 ,
-9082258170585104 ,
-441007309064202 ,
-19140573596487744 ,
-286216763286528 ,
-24787391243881106 ,
-572029581787264 ,
-11677908602986696737 ,
-1157566425976537099 ,
-649121437330728960 ,
-9225624128793616464 ,
-2305843026939346945 ,
-9223513050068946944 ,
-9051194349977600 ,
-19778170450479105 ,
-1299289815757492480 ,
-41096463845163521 ,
-1731636264488241153 ,
-9011670391719009 ,
-35802849511428 ,
-586031040024609026 ,
-1155182375442055425 ,
-721417201031306 ,
-9521753447987159232 ,
+    4620993457387995267 ,
+    81242931576446976 ,
+    2429972272644096 ,
+    1162105194805481472 ,
+    10156326495847432 ,
+    2323302970867736 ,
+    576752161828913152 ,
+    140877215303684 ,
+    18033142099608070 ,
+    37393126402178 ,
+    4616198422744137748 ,
+    18402116120870912 ,
+    2306973324900631104 ,
+    3026420066830018562 ,
+    9547913252493594664 ,
+    1301540568329101312 ,
+    2380227187577455104 ,
+    1130306619315712 ,
+    282033456808068 ,
+    2314889799613350032 ,
+    41095364318658560 ,
+    3459328567586456064 ,
+    2459106151355420672 ,
+    221241677302536193 ,
+    4612284187937083464 ,
+    4508001029407746 ,
+    2254001001464064 ,
+    12948398818754562 ,
+    281543712981001 ,
+    5190857066994010752 ,
+    2267193518134272 ,
+    9799905357605143562 ,
+    316865509397504 ,
+    6917687391675549696 ,
+    145139830884425 ,
+    2918351284593754177 ,
+    18015502316081216 ,
+    45036326987268228 ,
+    4794149870373120 ,
+    3458909656133420544 ,
+    24779163932042242 ,
+    9082258170585104 ,
+    441007309064202 ,
+    19140573596487744 ,
+    286216763286528 ,
+    24787391243881106 ,
+    572029581787264 ,
+    11677908602986696737 ,
+    1157566425976537099 ,
+    649121437330728960 ,
+    9225624128793616464 ,
+    2305843026939346945 ,
+    9223513050068946944 ,
+    9051194349977600 ,
+    19778170450479105 ,
+    1299289815757492480 ,
+    41096463845163521 ,
+    1731636264488241153 ,
+    9011670391719009 ,
+    35802849511428 ,
+    586031040024609026 ,
+    1155182375442055425 ,
+    721417201031306 ,
+    9521753447987159232 ,
 ];
 
 
 
 
-// rook relevant occupancy bit count for every square on board
+/// rook relevant occupancy bit count for every square on board
 const ROOK_REVEVANT_BITS: [u8;64] = [
     12, 11, 11, 11, 11, 11, 11, 12, 
     11, 10, 10, 10, 10, 10, 10, 11, 
@@ -193,6 +179,7 @@ const ROOK_REVEVANT_BITS: [u8;64] = [
 
 
 pub fn get_random_64()->u64{
+
     let n1 = random::<u64>() & 0xFFFF;
     let n2 = random::<u64>() & 0xFFFF;
     let n3 = random::<u64>() & 0xFFFF;
@@ -206,6 +193,9 @@ pub fn random_uint64_fewbits()->u64 {
 }
 
 
+
+///Generate attack for rook
+///https://www.chessprogramming.org/Magic_Bitboards
 
 pub fn ratt(sq: u64, block: u64) -> u64 {
     let mut result = 0;
@@ -247,7 +237,11 @@ pub fn ratt(sq: u64, block: u64) -> u64 {
     result
 }
 
+///Generate attack for bishop
+///https://www.chessprogramming.org/Magic_Bitboards
+
 pub fn batt(sq: u64, block: u64) -> u64 {
+
     let mut result = 0;
     let rk = (sq / 8) as u64;
     let fl = (sq % 8) as u64;
@@ -288,7 +282,11 @@ pub fn batt(sq: u64, block: u64) -> u64 {
 }
 
 
+///Magic numbers can be found out in 
+///https://www.chessprogramming.org/Looking_for_Magics
+
 pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
+
     let occupancy_index:usize= 1<<relevent_bits;
     let mut occupancies:Vec<u64> = vec![0; occupancy_index as usize];
     let mut attacks:Vec<u64> = vec![0;occupancy_index as usize];
@@ -307,9 +305,9 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
         attacks[i as usize] = if is_bishop { batt(square as u64, occupancies[i as usize]) } else { ratt(square as u64, occupancies[i as usize]) };
     }
 
-    for _k in 0..10_0000_000{ 
+    for _ in 0..10_0000_000{ 
         let magic_number = random_uint64_fewbits();
-        if bit_count(mask.wrapping_mul(magic_number) & 0xFF00000000000000 ) < 6 {
+        if u64::count_ones(mask.wrapping_mul(magic_number) & 0xFF00000000000000 ) < 6 {
             continue;
         }
         used_attacks.iter_mut().for_each(|a| *a=0);
@@ -334,14 +332,14 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
 }
 
 
+
+///Generate Magic numbers!!
 pub fn init_magic(){
     println!("BISHOP MAGIC NUMBERS:");
     for square in Squares::iter(){
          println!("{} , {:?}",find_magic(square, BISHOP_RELEVANT_BITS[square as usize].into(), true),square); 
     }
 }
-
-
 
 
 pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
