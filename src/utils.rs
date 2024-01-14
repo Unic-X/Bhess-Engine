@@ -33,72 +33,74 @@ const BISHOP_RELEVANT_BITS: [u8;64] = [
 ];
 
 
-const ROOK_MAGICS:[u64;64]= [
-   4719772841163636736 ,
-    9295447777131642886 ,
-    6989621807125954569 ,
-    3819074611950151936 ,
-    684549359566061696 ,
-    4683748010545447048 ,
-    612500544723878016 ,
-    144119587204562994 ,
-    23784774044778496 ,
-    1180506194066933828 ,
-    1171358184319746176 ,
-    578853358325465218 ,
-    289919303323485192 ,
-    13792286744265728 ,
-    9548897856010649728 ,
-    288793328270459428 ,
-    6958114750743986176 ,
-    887210502055272450 ,
-    13835200992868696096 ,
-    36170084531570688 ,
-    1153062791918127104 ,
-    577586927121744128 ,
-    649363323174846976 ,
-    1171162402584035588 ,
-    18016221723377792 ,
-    2305983888440164609 ,
-    2310351007426545664 ,
-    9223389633336377376 ,
-    2305922184788574336 ,
-    4785087491342344 ,
-    648535955709526280 ,
-    2323866487284303491 ,
-    2305913380113743920 ,
-    4503737070534656 ,
-    563089573417024 ,
-    290218297486477344 ,
-    144255959932339200 ,
-    166637586415092224 ,
-    1161929872159803586 ,
-    140876009443584 ,
-    11294768629841920 ,
-    288265561865994240 ,
-    4538784267927680 ,
-    9259437118025957384 ,
-    2251938326643712 ,
-    1407383540662280 ,
-    651333171409977348 ,
-    9223372659629883404 ,
-    1154122890712514816 ,
-    1157495499285172352 ,
-    140875012244608 ,
-    2326126799892971776 ,
-    1126449796908160 ,
-    5067099403715200 ,
-    1243011123733693440 ,
-    288797811411026432 ,
-    180869700522241 ,
-    288300781404168449 ,
-    12455405192675345 ,
-    288511919850047525 ,
-    4900479361982924802 ,
-    180707003835351298 ,
-    13528468931258372 ,
-    12826257237653881862, 
+
+const ROOK_MAGICS: [u64; 64] = [
+    0x8a80104000800020,
+    0x140002000100040,
+    0x2801880a0017001,
+    0x100081001000420,
+    0x200020010080420,
+    0x3001c0002010008,
+    0x8480008002000100,
+    0x2080088004402900,
+    0x800098204000,
+    0x2024401000200040,
+    0x100802000801000,
+    0x120800800801000,
+    0x208808088000400,
+    0x2802200800400,
+    0x2200800100020080,
+    0x801000060821100,
+    0x80044006422000,
+    0x100808020004000,
+    0x12108a0010204200,
+    0x140848010000802,
+    0x481828014002800,
+    0x8094004002004100,
+    0x4010040010010802,
+    0x20008806104,
+    0x100400080208000,
+    0x2040002120081000,
+    0x21200680100081,
+    0x20100080080080,
+    0x2000a00200410,
+    0x20080800400,
+    0x80088400100102,
+    0x80004600042881,
+    0x4040008040800020,
+    0x440003000200801,
+    0x4200011004500,
+    0x188020010100100,
+    0x14800401802800,
+    0x2080040080800200,
+    0x124080204001001,
+    0x200046502000484,
+    0x480400080088020,
+    0x1000422010034000,
+    0x30200100110040,
+    0x100021010009,
+    0x2002080100110004,
+    0x202008004008002,
+    0x20020004010100,
+    0x2048440040820001,
+    0x101002200408200,
+    0x40802000401080,
+    0x4008142004410100,
+    0x2060820c0120200,
+    0x1001004080100,
+    0x20c020080040080,
+    0x2935610830022400,
+    0x44440041009200,
+    0x280001040802101,
+    0x2100190040002085,
+    0x80c0084100102001,
+    0x4024081001000421,
+    0x20030a0244872,
+    0x12001008414402,
+    0x2006104900a0804,
+    0x1004081002402,
 ];
+
 
 
 const BISHOP_MAGIC:[u64;64] = [
@@ -203,7 +205,7 @@ pub fn random_uint64_fewbits()->u64 {
 ///Generate attack for rook
 ///https://www.chessprogramming.org/Magic_Bitboards
 
-pub fn ratt(sq: u64, block: u64) -> u64 {
+pub fn ratt(sq: u8, block: u64) -> u64 {
     let mut result = 0;
     let rk = (sq / 8) as u64;
     let fl = (sq % 8) as u64;
@@ -246,7 +248,7 @@ pub fn ratt(sq: u64, block: u64) -> u64 {
 ///Generate attack for bishop
 ///https://www.chessprogramming.org/Magic_Bitboards
 
-pub fn batt(sq: u64, block: u64) -> u64 {
+pub fn batt(sq: u8, block: u64) -> u64 {
 
     let mut result = 0;
     let rk = (sq / 8) as u64;
@@ -308,7 +310,7 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
     for i in 0..occupancy_index {
         occupancies[i as usize] = set_occupancy(i as u64, relevent_bits, mask);
        
-        attacks[i as usize] = if is_bishop { batt(square as u64, occupancies[i as usize]) } else { ratt(square as u64, occupancies[i as usize]) };
+        attacks[i as usize] = if is_bishop { batt(square as u8, occupancies[i as usize]) } else { ratt(square as u8, occupancies[i as usize]) };
     }
 
     for _ in 0..10_0000_000{ 
@@ -364,9 +366,25 @@ pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
     occupancy
 }
 
+pub fn get_rook_attacks(square: Squares,occupancy:u64,masks:Vec<u64>,attacks:Vec<Vec<u64>>)->u64{
+    let mut occupancy = occupancy &masks[square as usize]; 
+    occupancy = occupancy.wrapping_mul(ROOK_MAGICS[square as usize]);
+    occupancy >>= 64 - ROOK_REVEVANT_BITS[square as usize];
+    attacks[square as usize][occupancy as usize]
+}
 
 
-pub fn init_slider_attacks(piece:Slider)->Vec<u64>{
+
+pub fn get_bishop_attacks(square: Squares,occupancy:u64,masks:Vec<u64>,attacks:Vec<Vec<u64>>)->u64{
+    let mut occupancy = occupancy &masks[square as usize]; 
+    occupancy = occupancy.wrapping_mul(BISHOP_MAGIC[square as usize]);
+    occupancy >>= 64 - BISHOP_RELEVANT_BITS[square as usize];
+    attacks[square as usize][occupancy as usize]
+}
+
+
+
+pub fn init_slider_attacks(piece:Slider)->(Vec<Vec<u64>>,Vec<u64>){
     let mut attacks = match piece {
         Slider::Bishop => {
             vec![vec![0u64;512];64]
@@ -384,15 +402,13 @@ pub fn init_slider_attacks(piece:Slider)->Vec<u64>{
                 let relevent_bit_count = attack_mask.count_ones() as u64;
 
                 let occupancy_indices = 1 << relevent_bit_count;
-                let mut max:u64 = 0;
                 for index in 0..occupancy_indices {
                     let occupancy = set_occupancy(index, relevent_bit_count, attack_mask);
                     let magic_index = occupancy.wrapping_mul(BISHOP_MAGIC[idx]) >> (64 - BISHOP_RELEVANT_BITS[idx]);
-                    attacks[square as usize][magic_index as usize] = mask_bishop(square, 0, occupancy);
+                    attacks[square as usize][magic_index as usize] = batt(square as u8, occupancy);
                 }
             }
 
-            println!("{:?}",attacks);
         },
         Slider::Rook => {
            for (idx,square) in Squares::iter().enumerate(){
@@ -401,19 +417,17 @@ pub fn init_slider_attacks(piece:Slider)->Vec<u64>{
                 let relevent_bit_count = attack_mask.count_ones() as u64;
 
                 let occupancy_indices = 1 << relevent_bit_count;
-                let mut max:u64 = 0;
                 for index in 0..occupancy_indices {
                     let occupancy = set_occupancy(index, relevent_bit_count, attack_mask);
-                    let magic_index = occupancy.wrapping_mul(ROOK_MAGICS[idx]) >> (64 - BISHOP_RELEVANT_BITS[idx]);
-                    attacks[square as usize][magic_index as usize] = ratt(square, occupancy);
+                    let magic_index = occupancy.wrapping_mul(ROOK_MAGICS[idx]) >> (64 - ROOK_REVEVANT_BITS[idx]);
+                    attacks[square as usize][magic_index as usize] = ratt(square as u8, occupancy);
                 }
             }
 
-            println!("{:?}",attacks);
         },
     }
 
 
-    mask
+    (attacks,mask)
 }
 

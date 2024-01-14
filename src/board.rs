@@ -8,13 +8,7 @@ use strum_macros::EnumIter;
 
 #[macro_export]
 macro_rules! set_bit {
-    ($square:expr) => {
-         { 
-        let mut bitboard:u64 = 0; 
-        bitboard |=  1<< $square;          
-         bitboard 
-         } 
-    };
+   
 
      ($squares:expr) => {
          { 
