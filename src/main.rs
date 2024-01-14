@@ -13,10 +13,7 @@ mod utils;
 
 fn main() {
 
-
-    for board in init_slider_attacks(Slider::Bishop).iter(){
-        render(*board);
-    };   
+render(18049651735265280);
 }
 
 

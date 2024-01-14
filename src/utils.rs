@@ -367,7 +367,14 @@ pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
 
 
 pub fn init_slider_attacks(piece:Slider)->Vec<u64>{
-
+    let mut attacks = match piece {
+        Slider::Bishop => {
+            vec![vec![0u64;512];64]
+        },
+        Slider::Rook =>{
+            vec![vec![0u64;4096];64]
+        }
+    };
     let mut mask:Vec<u64> = Vec::new();
     match piece {
         Slider::Bishop => {
@@ -377,21 +384,32 @@ pub fn init_slider_attacks(piece:Slider)->Vec<u64>{
                 let relevent_bit_count = attack_mask.count_ones() as u64;
 
                 let occupancy_indices = 1 << relevent_bit_count;
-
+                let mut max:u64 = 0;
                 for index in 0..occupancy_indices {
                     let occupancy = set_occupancy(index, relevent_bit_count, attack_mask);
-                    let magic_index = occupancy*BISHOP_MAGIC[idx] >> (64 - BISHOP_RELEVANT_BITS[idx]);
-                    
-
-
-                
+                    let magic_index = occupancy.wrapping_mul(BISHOP_MAGIC[idx]) >> (64 - BISHOP_RELEVANT_BITS[idx]);
+                    attacks[square as usize][magic_index as usize] = mask_bishop(square, 0, occupancy);
                 }
             }
+
+            println!("{:?}",attacks);
         },
         Slider::Rook => {
-            for square in Squares::iter(){
-                mask.push(mask_rook(square));
+           for (idx,square) in Squares::iter().enumerate(){
+                let attack_mask = mask_rook(square);
+                mask.push(attack_mask);
+                let relevent_bit_count = attack_mask.count_ones() as u64;
+
+                let occupancy_indices = 1 << relevent_bit_count;
+                let mut max:u64 = 0;
+                for index in 0..occupancy_indices {
+                    let occupancy = set_occupancy(index, relevent_bit_count, attack_mask);
+                    let magic_index = occupancy.wrapping_mul(ROOK_MAGICS[idx]) >> (64 - BISHOP_RELEVANT_BITS[idx]);
+                    attacks[square as usize][magic_index as usize] = ratt(square, occupancy);
+                }
             }
+
+            println!("{:?}",attacks);
         },
     }
 
