@@ -20,8 +20,8 @@ This is a simple chess engine implemented in Rust, utilizing bitboards for effic
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/chess-engine-rust-bitboard.git
-   cd chess-engine-rust-bitboard
+   git clone https://github.com/Unic-X/Bhess-Engine.git
+   cd Bhess-Engine
 2. Build and run the chess engine:
     ```bash
     cargo build --release   
