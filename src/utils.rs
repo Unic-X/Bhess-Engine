@@ -15,6 +15,12 @@ pub fn get_lsb(bitboard:u64) ->Option<u64> {
     } 
 }
 
+
+pub enum Slider {
+    Rook,
+    Bishop,
+}
+
 const BISHOP_RELEVANT_BITS: [u8;64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 
     5, 5, 5, 5, 5, 5, 5, 5, 
@@ -150,13 +156,13 @@ const BISHOP_MAGIC:[u64;64] = [
     2305843026939346945 ,
     9223513050068946944 ,
     9051194349977600 ,
-    19778170450479105 ,
     1299289815757492480 ,
     41096463845163521 ,
     1731636264488241153 ,
     9011670391719009 ,
     35802849511428 ,
     586031040024609026 ,
+    19778170450479105 ,
     1155182375442055425 ,
     721417201031306 ,
     9521753447987159232 ,
@@ -177,7 +183,7 @@ const ROOK_REVEVANT_BITS: [u8;64] = [
     12, 11, 11, 11, 11, 11, 11, 12
 ];
 
-
+//PRNG using bitshifts 
 pub fn get_random_64()->u64{
 
     let n1 = random::<u64>() & 0xFFFF;
@@ -295,7 +301,7 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
     let mask:u64 = if is_bishop {
         mask_bishop(square, 0, 0)
     }else {
-        mask_rook(square, 0)
+        mask_rook(square)
     };
         
     
@@ -357,3 +363,39 @@ pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
 
     occupancy
 }
+
+
+
+pub fn init_slider_attacks(piece:Slider)->Vec<u64>{
+
+    let mut mask:Vec<u64> = Vec::new();
+    match piece {
+        Slider::Bishop => {
+            for (idx,square) in Squares::iter().enumerate(){
+                let attack_mask = mask_bishop(square, 0,0);
+                mask.push(attack_mask);
+                let relevent_bit_count = attack_mask.count_ones() as u64;
+
+                let occupancy_indices = 1 << relevent_bit_count;
+
+                for index in 0..occupancy_indices {
+                    let occupancy = set_occupancy(index, relevent_bit_count, attack_mask);
+                    let magic_index = occupancy*BISHOP_MAGIC[idx] >> (64 - BISHOP_RELEVANT_BITS[idx]);
+                    
+
+
+                
+                }
+            }
+        },
+        Slider::Rook => {
+            for square in Squares::iter(){
+                mask.push(mask_rook(square));
+            }
+        },
+    }
+
+
+    mask
+}
+

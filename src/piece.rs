@@ -56,7 +56,7 @@ pub fn mask_king(sq: Squares) -> u64 {
         | (attacks & NOT_H_FILE) << 9
 }
 
-// Mask Pawn i.e every attack move for squares
+// Mask Bishop i.e every attack move for squares
 pub fn mask_bishop(sq: Squares, bitboard: u64, block: u64) -> u64 {
     let mut attacks: u64 = 0;
     let tr = (sq as u8) / 8;
@@ -84,7 +84,9 @@ pub fn mask_bishop(sq: Squares, bitboard: u64, block: u64) -> u64 {
     */
 }
 
-pub fn mask_rook(sq: Squares, mut bitboard: u64) -> u64 {
+
+
+pub fn mask_rook(sq: Squares) -> u64 {
     let mut attacks: u64 = 0;
     let tr = (sq as u8) / 8;
     let tf = (sq as u8) % 8;
@@ -106,8 +108,7 @@ pub fn mask_rook(sq: Squares, mut bitboard: u64) -> u64 {
     }
     attacks
     /*for (r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++) attacks |= (1ULL << (r * 8 + f));
-    for (r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++) attacks |= (1ULL << (r * 8 + f));
-    for (r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--) attacks |= (1ULL << (r * 8 + f));
+    for (r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++) attacks |= (1ULL << (r * 8 + f)); for (r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--) attacks |= (1ULL << (r * 8 + f));
     for (r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--) attacks |= (1ULL << (r * 8 + f));
     */
 }
