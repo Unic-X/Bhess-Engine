@@ -1,5 +1,4 @@
 use crate::board::Squares;
-use crate::set_bit;
 
 pub enum Sides {
     White,
@@ -112,3 +111,6 @@ pub fn mask_rook(sq: Squares) -> u64 {
     for (r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--) attacks |= (1ULL << (r * 8 + f));
     */
 }
+
+
+

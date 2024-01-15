@@ -1,4 +1,3 @@
-
 use rand::prelude::*;
 use strum::IntoEnumIterator;
 
@@ -313,7 +312,7 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
         attacks[i as usize] = if is_bishop { batt(square as u8, occupancies[i as usize]) } else { ratt(square as u8, occupancies[i as usize]) };
     }
 
-    for _ in 0..10_0000_000{ 
+    for _ in 0..1_000_0000_000 as usize{ 
         let magic_number = random_uint64_fewbits();
         if u64::count_ones(mask.wrapping_mul(magic_number) & 0xFF00000000000000 ) < 6 {
             continue;
@@ -345,7 +344,7 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
 pub fn init_magic(){
     println!("BISHOP MAGIC NUMBERS:");
     for square in Squares::iter(){
-         println!("{} , {:?}",find_magic(square, BISHOP_RELEVANT_BITS[square as usize].into(), true),square); 
+         println!("{} ,",find_magic(square, BISHOP_RELEVANT_BITS[square as usize].into(), true)); 
     }
 }
 
@@ -366,25 +365,25 @@ pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
     occupancy
 }
 
-pub fn get_rook_attacks(square: Squares,occupancy:u64,masks:Vec<u64>,attacks:Vec<Vec<u64>>)->u64{
+pub fn get_rook_attacks(square: Squares,occupancy:u64,masks:Vec<u64>,attacks:Vec<u64>)->u64{
     let mut occupancy = occupancy &masks[square as usize]; 
     occupancy = occupancy.wrapping_mul(ROOK_MAGICS[square as usize]);
     occupancy >>= 64 - ROOK_REVEVANT_BITS[square as usize];
-    attacks[square as usize][occupancy as usize]
+    attacks[square as usize * 4096 + occupancy as usize]
 }
 
 
 
-pub fn get_bishop_attacks(square: Squares,occupancy:u64,masks:Vec<u64>,attacks:Vec<Vec<u64>>)->u64{
+pub fn get_bishop_attacks(square: Squares,occupancy:u64,masks:Vec<u64>,attacks:Vec<u64>)->u64{
     let mut occupancy = occupancy &masks[square as usize]; 
     occupancy = occupancy.wrapping_mul(BISHOP_MAGIC[square as usize]);
     occupancy >>= 64 - BISHOP_RELEVANT_BITS[square as usize];
-    attacks[square as usize][occupancy as usize]
+    attacks[square as usize * 512 + occupancy as usize]
 }
 
 
 
-pub fn init_slider_attacks(piece:Slider)->(Vec<Vec<u64>>,Vec<u64>){
+pub fn init_slider_attacks(piece:Slider)->(Vec<u64>,Vec<u64>){
     let mut attacks = match piece {
         Slider::Bishop => {
             vec![vec![0u64;512];64]
@@ -428,6 +427,6 @@ pub fn init_slider_attacks(piece:Slider)->(Vec<Vec<u64>>,Vec<u64>){
     }
 
 
-    (attacks,mask)
+    (attacks.into_iter().flatten().collect(),mask)
 }
 
