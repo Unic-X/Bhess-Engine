@@ -1,8 +1,7 @@
 mod board;
 use board::{render, Squares};
-use samaj::piece::NOT_A_FILE;
 
-use crate::{utils::*, piece::mask_king};
+use crate::utils::*;
 mod piece;
 mod utils;
 
@@ -11,10 +10,14 @@ mod utils;
 fn main() {
     let (attacks,masks) = init_slider_attacks(Slider::Bishop);
     use std::time::Instant;
+    let occupancy = set_bit!(&[Squares::e7,Squares::d4]);
+    get_bishop_attacks(Squares::d8, &occupancy, &masks, &attacks);
+    for _ in 1..1000{
+
     let now = Instant::now();
-    let a = mask_king(Squares::a8);
-    render(NOT_A_FILE);
-    render(a);
+    get_bishop_attacks(Squares::c5, &occupancy, &masks, &attacks);
+    println!("{:?}",now.elapsed());
+    }
 }
 
 

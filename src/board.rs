@@ -1,8 +1,5 @@
 use std::ops::Shl;
-
-
 use strum_macros::EnumIter;
-
 
 ///TODO impl these set_bit,pop_bit etc for the Board itself rather than a separate macro for it
 
@@ -45,7 +42,6 @@ macro_rules! pop_bit {
 }
 
 #[macro_export]
-
 macro_rules! get_bit {
     ($square:expr,$bitboard:expr) => {
         match $bitboard & (1 << $square) {
@@ -54,6 +50,8 @@ macro_rules! get_bit {
         }
     };
 }
+
+
 #[allow(non_camel_case_types)]
 #[derive(Copy, Clone,Debug,EnumIter)]
 pub enum Squares {
