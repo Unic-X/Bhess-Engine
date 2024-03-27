@@ -429,4 +429,18 @@ pub fn init_slider_attacks(piece:Slider)->(Vec<u64>,Vec<u64>){
 
     (attacks.into_iter().flatten().collect(),mask)
 }
+/// Initizalizes all .
+///
+/// # Examples
+///
+/// ```
+/// // You can have rust code between fences inside the comments
+/// // If you pass --test to `rustdoc`, it will even test it for you!
+/// use doc::Person;
+/// let (BAttacks,BMasks), (RAttacks,RMasks), OCCUBitboard  = init_everything();
+/// ```
 
+pub fn init_everything()->((Vec<u64>,Vec<u64>),(Vec<u64>,Vec<u64>),Vec<u64>){
+        
+    
+}
