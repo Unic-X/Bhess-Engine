@@ -1,7 +1,7 @@
 use rand::prelude::random;
 use strum::IntoEnumIterator;
 
-use crate::{board::*, piece::*, get_lsb};
+use crate::{files::board::*, files::piece::*,get_lsb};
 
 pub enum Slider {
     Rook,

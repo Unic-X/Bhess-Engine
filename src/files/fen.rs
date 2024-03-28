@@ -1,4 +1,4 @@
-use crate::board::*;
+use crate::files::board::*;
 use nom::{self, multi::separated_list1, bytes::complete::tag, IResult};
 //Functional Way of FEN parsing
 

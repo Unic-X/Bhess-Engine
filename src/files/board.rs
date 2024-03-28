@@ -49,3 +49,15 @@ pub fn render(bitboard:u64){
     print!("Biboard : {bitboard} \n");
 }
 
+/// Sets the initial bitboard for all 12 pieces
+///
+/// White : King, Queen, Rook, Knight, Bishop, Pawn
+/// Black : King, Queen, Rook, Knight, Bishop, Pawn
+///
+/// Example: 
+/// 
+/// 
+///
+fn init_board(){
+
+}
