@@ -5,20 +5,20 @@ pub enum Sides {
     Black,
 }
 
-pub const NOT_A_FILE: u64 = 18374403900871474942;
+const NOT_A_FILE: u64 = 18374403900871474942;
 
 // not H file constant
-pub const NOT_H_FILE: u64 = 9187201950435737471;
+const NOT_H_FILE: u64 = 9187201950435737471;
 
 // not HG file constant
-pub const NOT_HG_FILE: u64 = 4557430888798830399;
+const NOT_HG_FILE: u64 = 4557430888798830399;
 
 // not AB file constant
-pub const NOT_AB_FILE: u64 = 18229723555195321596;
+const NOT_AB_FILE: u64 = 18229723555195321596;
 
 // Mask Pawn i.e every attack move for squares
 pub fn mask_pawn(sq: Squares, side: Sides) -> u64 {
-    let mut attacks = 1 << sq as u8;
+    let attacks = 1 << sq as u8;
 
     // CHANGE THE BITBOARD TO ADD EVERY SQUARE THAT HAS
     // CHECK SIDE IF WHITE OR BLACK
@@ -76,11 +76,7 @@ pub fn mask_bishop(sq: Squares, bitboard: u64, block: u64) -> u64 {
         }
     }
     attacks
-    /*for (r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++) attacks |= (1ULL << (r * 8 + f));
-    for (r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++) attacks |= (1ULL << (r * 8 + f));
-    for (r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--) attacks |= (1ULL << (r * 8 + f));
-    for (r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--) attacks |= (1ULL << (r * 8 + f));
-    */
+  
 }
 
 
@@ -106,11 +102,4 @@ pub fn mask_rook(sq: Squares) -> u64 {
         attacks |= 1u64 << (u64::from(tr) * 8 + u64::from(f));
     }
     attacks
-    /*for (r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++) attacks |= (1ULL << (r * 8 + f));
-    for (r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++) attacks |= (1ULL << (r * 8 + f)); for (r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--) attacks |= (1ULL << (r * 8 + f));
-    for (r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--) attacks |= (1ULL << (r * 8 + f));
-    */
-}
-
-
-
+ }

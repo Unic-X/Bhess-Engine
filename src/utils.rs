@@ -1,19 +1,7 @@
-use rand::prelude::*;
+use rand::prelude::random;
 use strum::IntoEnumIterator;
 
-use crate::{board::*, piece::*};
-
-#[inline]
-pub fn get_lsb(bitboard:u64) ->Option<u64> {
-    
-   if bitboard>0{
-        let _x = bitboard as i64;
-        Some(u64::count_ones((_x & -_x) as u64 - 1) as u64) 
-    }else{
-        None
-    } 
-}
-
+use crate::{board::*, piece::*, get_lsb};
 
 pub enum Slider {
     Rook,
@@ -33,7 +21,7 @@ const BISHOP_RELEVANT_BITS: [u8;64] = [
 
 
 
-const ROOK_MAGICS: [u64; 64] = [
+static ROOK_MAGICS: [u64; 64] = [
     0x8a80104000800020,
     0x140002000100040,
     0x2801880a0017001,
@@ -102,7 +90,7 @@ const ROOK_MAGICS: [u64; 64] = [
 
 
 
-const BISHOP_MAGIC:[u64;64] = [
+static BISHOP_MAGIC:[u64;64] = [
     4620993457387995267 ,
     81242931576446976 ,
     2429972272644096 ,
@@ -354,7 +342,7 @@ pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
     let mut current_attack_mask = attack_mask;
 
     for count in 0..bits_in_mask {
-        let square = get_lsb(current_attack_mask);
+        let square = get_lsb!(current_attack_mask);
         current_attack_mask &= !(1 << square.unwrap());
         
         if (index & (1 << count)) != 0 {
@@ -380,7 +368,6 @@ pub fn get_bishop_attacks(square: Squares,occupancy:&u64,masks:&Vec<u64>,attacks
     occupancy >>= 64 - BISHOP_RELEVANT_BITS[square as usize];
     attacks[square as usize * 512 + occupancy as usize]
 }
-
 
 
 pub fn init_slider_attacks(piece:Slider)->(Vec<u64>,Vec<u64>){
@@ -429,18 +416,4 @@ pub fn init_slider_attacks(piece:Slider)->(Vec<u64>,Vec<u64>){
 
     (attacks.into_iter().flatten().collect(),mask)
 }
-/// Initizalizes all .
-///
-/// # Examples
-///
-/// ```
-/// // You can have rust code between fences inside the comments
-/// // If you pass --test to `rustdoc`, it will even test it for you!
-/// use doc::Person;
-/// let (BAttacks,BMasks), (RAttacks,RMasks), OCCUBitboard  = init_everything();
-/// ```
 
-pub fn init_everything()->((Vec<u64>,Vec<u64>),(Vec<u64>,Vec<u64>),Vec<u64>){
-        
-    
-}

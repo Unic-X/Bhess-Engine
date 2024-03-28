@@ -1,7 +1,8 @@
+
+
 #[macro_export]
 macro_rules! set_bit {
    
-
      ($squares:expr) => {
          { 
         let mut bitboard:u64 = 0; 
@@ -46,3 +47,16 @@ macro_rules! get_bit {
     };
 }
 
+
+#[macro_export]
+macro_rules! get_lsb{
+    
+   ($bitboard:expr)=>{
+        if $bitboard>0{
+            let _x = $bitboard as i64;
+            Some(u64::count_ones((_x & -_x) as u64 - 1) as u64) 
+        }else{
+            None
+        }
+    }
+}
