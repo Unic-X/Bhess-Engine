@@ -1,5 +1,6 @@
 use std::ops::Shl;
-use crate::get_bit;
+use crate::{get_bit, files::piece::{PieceKind, Piece}, get_printable};
+use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
 
@@ -34,12 +35,8 @@ pub fn render(bitboard:u64){
             if file == 0 {
                 print!(" {} ", 8 - rank);
             }
-            print!(" {}",get_bit!(square, bitboard));
+            print!(" {}",get_printable!(square, bitboard));
 
-            /*match bitboard & (1 << square) {
-                0 => print!("0"),
-                _ => print!("1"),
-            }*/
         }
         print!("\n");
     }
@@ -47,6 +44,43 @@ pub fn render(bitboard:u64){
     
     //Board state in u64 Decimal 
     print!("Biboard : {bitboard} \n");
+}
+
+
+
+pub fn render_pieces(bitboards:&[u64]){
+    let all_pieces = Piece::gen_all();
+    for rank in 0..8 {
+        for file in 0..8 {
+            //Use ranks and file to convert into Square number
+            let square = rank * 8 + file;
+            
+            if file == 0 {
+                print!(" {} ", 8 - rank);
+            }
+            
+            let mut piece = None;
+
+            for bb_piece in &all_pieces{
+                if get_bit!(square, bitboards[bb_piece.index()]) {
+                    piece = Some(bb_piece);
+                }
+            }
+
+            match piece {
+                Some(p) => {
+                    print!(" {}",p.fancy_char());
+                }
+                None => {
+                    print!(" .");
+                }
+            }
+           
+        }
+        print!("\n");
+    }
+    print!("\n    a b c d e f g h \n");
+    
 }
 
 /// Sets the initial bitboard for all 12 pieces

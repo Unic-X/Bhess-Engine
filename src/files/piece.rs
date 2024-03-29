@@ -1,3 +1,5 @@
+use strum_macros::EnumIter;
+
 use crate::files::board::*;
 
 pub enum Sides {
@@ -7,7 +9,7 @@ pub enum Sides {
 
 /// Types of Pieces
 
-#[derive(Copy, Clone, PartialEq, Eq, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug, EnumIter)]
 pub enum PieceKind{
     King,
     Queen,
@@ -36,8 +38,22 @@ pub struct Piece{
 }
 
 impl Piece {
-    pub fn index(self) -> usize{
-        self.kind.index()
+    pub fn index(&self) -> usize{
+        match (&self.color, &self.kind) {
+            (Sides::White, PieceKind::Pawn ) => 0,
+            (Sides::White, PieceKind::Knight ) => 1,
+            (Sides::White, PieceKind::Bishop) =>  2,
+            (Sides::White, PieceKind::Rook) => 3,
+            (Sides::White, PieceKind::Queen) => 4,
+            (Sides::White, PieceKind::King) => 5,
+
+            (Sides::Black, PieceKind::Pawn ) => 6,
+            (Sides::Black, PieceKind::Knight) => 7,
+            (Sides::Black, PieceKind::Bishop) => 8,
+            (Sides::Black, PieceKind::Rook) => 9,
+            (Sides::Black, PieceKind::Queen) => 10,
+            (Sides::Black, PieceKind::King) => 11,
+        }
     }
         
     pub const fn pawn(color: Sides) -> Self {
@@ -65,8 +81,8 @@ impl Piece {
     }
 
     // Get the "fancy" character for this piece
-    fn fancy_char(self) -> &'static str {
-        match (self.color, self.kind) {
+    pub fn fancy_char(&self) -> &'static str {
+        match (&self.color, &self.kind) {
             (Sides::White, PieceKind::Pawn ) => "♙",
             (Sides::White, PieceKind::Knight ) => "♘",
             (Sides::White, PieceKind::Bishop) =>  "♗",
@@ -83,8 +99,8 @@ impl Piece {
     }
 
     // Get the "simple" character to represent this piece (capitalized based on the piece's color)
-    fn simple_char(self) -> &'static str {
-        match (self.color, self.kind) {
+    pub fn simple_char(&self) -> &'static str {
+        match (&self.color, &self.kind) {
             (Sides::White, PieceKind::Pawn ) => "P",
             (Sides::White, PieceKind::Knight ) => "N",
             (Sides::White, PieceKind::Bishop) => "B",
@@ -98,6 +114,23 @@ impl Piece {
             (Sides::Black, PieceKind::Queen) => "q",
             (Sides::Black, PieceKind::King) => "k",
         }
+    }
+    pub fn gen_all()->[Self;12]{
+       [
+            Piece::pawn(Sides::White),
+            Piece::knight(Sides::White),
+            Piece::bishop(Sides::White),
+            Piece::rook(Sides::White),
+            Piece::queen(Sides::White),
+            Piece::king(Sides::White),
+
+            Piece::pawn(Sides::Black),
+            Piece::knight(Sides::Black),
+            Piece::bishop(Sides::Black),
+            Piece::rook(Sides::Black),
+            Piece::queen(Sides::Black),
+            Piece::king(Sides::Black),
+        ]
     }
 }
 

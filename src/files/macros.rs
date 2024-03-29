@@ -11,13 +11,21 @@ macro_rules! set_bit {
          } 
     };
 
-    ($squares:expr,mut $bitboard:expr)=>{
-         {
-         for square in $squares {
-            $bitboard |=  1<< *square;          
-         }
-         $bitboard 
-         } 
+   ($squares:expr, $bitboard:expr) => {
+        {
+            for square in $squares {
+                $bitboard |= 1 << *square;
+            }
+            $bitboard 
+        }
+    };
+    ($squares:expr, mut $bitboard:expr) => {
+        {
+            for square in $squares {
+                $bitboard |= 1 << *square;
+            }
+            $bitboard 
+        }
     };
 
 }
@@ -39,8 +47,19 @@ macro_rules! pop_bit {
 macro_rules! get_bit {
     ($square:expr,$bitboard:expr) => {
         match $bitboard & (1 << $square) {
-            0 => ".",
-            _ => "1",
+            0 => false,
+            _ => true,
+        }
+    };
+}
+
+
+#[macro_export]
+macro_rules! get_printable {
+    ($square:expr,$bitboard:expr) => {
+        match $bitboard & (1 << $square) {
+            0 => '.',
+            _ => '1',
         }
     };
 }

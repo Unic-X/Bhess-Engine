@@ -3,11 +3,16 @@ use strum::IntoEnumIterator;
 
 use crate::{files::board::*, files::piece::*,get_lsb};
 
+
+/// Enumeration for Slider Pieces
+/// Rook and Bishop
 pub enum Slider {
     Rook,
     Bishop,
 }
 
+
+/// Bishop relevant occupancy bit count for every square on board
 const BISHOP_RELEVANT_BITS: [u8;64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 
     5, 5, 5, 5, 5, 5, 5, 5, 
@@ -21,6 +26,19 @@ const BISHOP_RELEVANT_BITS: [u8;64] = [
 
 
 
+/// Rook relevant occupancy bit count for every square on board
+const ROOK_REVEVANT_BITS: [u8;64] = [
+    12, 11, 11, 11, 11, 11, 11, 12, 
+    11, 10, 10, 10, 10, 10, 10, 11, 
+    11, 10, 10, 10, 10, 10, 10, 11, 
+    11, 10, 10, 10, 10, 10, 10, 11, 
+    11, 10, 10, 10, 10, 10, 10, 11, 
+    11, 10, 10, 10, 10, 10, 10, 11, 
+    11, 10, 10, 10, 10, 10, 10, 11, 
+    12, 11, 11, 11, 11, 11, 11, 12
+];
+
+/// Magic numbers for the Rook
 static ROOK_MAGICS: [u64; 64] = [
     0x8a80104000800020,
     0x140002000100040,
@@ -89,7 +107,7 @@ static ROOK_MAGICS: [u64; 64] = [
 ];
 
 
-
+/// Magic numbers for the Bishop
 static BISHOP_MAGIC:[u64;64] = [
     4620993457387995267 ,
     81242931576446976 ,
@@ -160,19 +178,8 @@ static BISHOP_MAGIC:[u64;64] = [
 
 
 
-/// rook relevant occupancy bit count for every square on board
-const ROOK_REVEVANT_BITS: [u8;64] = [
-    12, 11, 11, 11, 11, 11, 11, 12, 
-    11, 10, 10, 10, 10, 10, 10, 11, 
-    11, 10, 10, 10, 10, 10, 10, 11, 
-    11, 10, 10, 10, 10, 10, 10, 11, 
-    11, 10, 10, 10, 10, 10, 10, 11, 
-    11, 10, 10, 10, 10, 10, 10, 11, 
-    11, 10, 10, 10, 10, 10, 10, 11, 
-    12, 11, 11, 11, 11, 11, 11, 12
-];
-
-//PRNG using bitshifts 
+/// PRNG using bitshifts
+///
 pub fn get_random_64()->u64{
 
     let n1 = random::<u64>() & 0xFFFF;
@@ -189,8 +196,8 @@ pub fn random_uint64_fewbits()->u64 {
 
 
 
-///Generate attack for rook
-///https://www.chessprogramming.org/Magic_Bitboards
+/// Generate attack for rook
+/// https://www.chessprogramming.org/Magic_Bitboards
 
 pub fn ratt(sq: u8, block: u64) -> u64 {
     let mut result = 0;
@@ -277,8 +284,8 @@ pub fn batt(sq: u8, block: u64) -> u64 {
 }
 
 
-///Magic numbers can be found out in 
-///https://www.chessprogramming.org/Looking_for_Magics
+/// Magic numbers can be found out by:
+/// https://www.chessprogramming.org/Looking_for_Magics
 
 pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
 
@@ -328,7 +335,7 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
 
 
 
-///Generate Magic numbers!!
+/// Generate Magic numbers!!
 pub fn init_magic(){
     println!("BISHOP MAGIC NUMBERS:");
     for square in Squares::iter(){
@@ -369,7 +376,8 @@ pub fn get_bishop_attacks(square: Squares,occupancy:&u64,masks:&Vec<u64>,attacks
     attacks[square as usize * 512 + occupancy as usize]
 }
 
-
+/// Generate attack tables for Slider piece (Rook, Bishop)
+///
 pub fn init_slider_attacks(piece:Slider)->(Vec<u64>,Vec<u64>){
     let mut attacks = match piece {
         Slider::Bishop => {

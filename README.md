@@ -6,6 +6,7 @@ This is a simple chess engine implemented in Rust, utilizing bitboards for effic
 
 - **Bitboard Representation:** Efficient board representation using bitboards for pieces.
 - **Move Generation:** Generate legal moves for a given position.
+- **FEN Parsing:** Parse the FEN string for string to board representation. **[TODO]**
 - **Quiescence search:** Implement the Quiescence search algorithm for efficient search with iterative deepning **[TODO]**
 - **UCI Support:** Follows the Universal Chess Interface (UCI) standard for communication with GUIs. **[TODO]**
 
