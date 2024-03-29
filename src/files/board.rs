@@ -1,6 +1,5 @@
 use std::ops::Shl;
-use crate::{get_bit, files::piece::{PieceKind, Piece}, get_printable};
-use strum::IntoEnumIterator;
+use crate::{get_bit, files::piece::Piece, get_printable};
 use strum_macros::EnumIter;
 
 
@@ -69,7 +68,7 @@ pub fn render_pieces(bitboards:&[u64]){
 
             match piece {
                 Some(p) => {
-                    print!(" {}",p.fancy_char());
+                    print!(" {}",p.simple_char());
                 }
                 None => {
                     print!(" .");
@@ -83,15 +82,3 @@ pub fn render_pieces(bitboards:&[u64]){
     
 }
 
-/// Sets the initial bitboard for all 12 pieces
-///
-/// White : King, Queen, Rook, Knight, Bishop, Pawn
-/// Black : King, Queen, Rook, Knight, Bishop, Pawn
-///
-/// Example: 
-/// 
-/// 
-///
-fn init_board(){
-
-}

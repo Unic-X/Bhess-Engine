@@ -295,7 +295,7 @@ pub fn find_magic(square:Squares, relevent_bits:u64,is_bishop:bool)->u64{
     let mut used_attacks:Vec<u64> = vec![0; occupancy_index as usize];
 
     let mask:u64 = if is_bishop {
-        mask_bishop(square, 0, 0)
+        mask_bishop(square, 0)
     }else {
         mask_rook(square)
     };
@@ -391,7 +391,7 @@ pub fn init_slider_attacks(piece:Slider)->(Vec<u64>,Vec<u64>){
     match piece {
         Slider::Bishop => {
             for (idx,square) in Squares::iter().enumerate(){
-                let attack_mask = mask_bishop(square, 0,0);
+                let attack_mask = mask_bishop(square,0);
                 mask.push(attack_mask);
                 let relevent_bit_count = attack_mask.count_ones() as u64;
 

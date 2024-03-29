@@ -2,13 +2,13 @@ use strum_macros::EnumIter;
 
 use crate::files::board::*;
 
+
 pub enum Sides {
     White,
     Black,
 }
 
 /// Types of Pieces
-
 #[derive(Copy, Clone, PartialEq, Eq, Debug, EnumIter)]
 pub enum PieceKind{
     King,
@@ -193,7 +193,7 @@ pub fn mask_king(sq: Squares) -> u64 {
 }
 
 // Mask Bishop i.e every attack move for squares
-pub fn mask_bishop(sq: Squares, bitboard: u64, block: u64) -> u64 {
+pub fn mask_bishop(sq: Squares, block: u64) -> u64 {
     let mut attacks: u64 = 0;
     let tr = (sq as u8) / 8;
     let tf = (sq as u8) % 8;
@@ -215,8 +215,6 @@ pub fn mask_bishop(sq: Squares, bitboard: u64, block: u64) -> u64 {
     attacks
   
 }
-
-
 
 pub fn mask_rook(sq: Squares) -> u64 {
     let mut attacks: u64 = 0;
