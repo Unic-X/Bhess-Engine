@@ -360,6 +360,7 @@ pub fn set_occupancy(index: u64, bits_in_mask: u64, attack_mask: u64) -> u64 {
     occupancy
 }
 
+#[inline]
 pub fn get_rook_attacks(square: Squares,occupancy:&u64,masks:&Vec<u64>,attacks:&Vec<u64>)->u64{
     let mut occupancy = occupancy &masks[square as usize]; 
     occupancy = occupancy.wrapping_mul(ROOK_MAGICS[square as usize]);

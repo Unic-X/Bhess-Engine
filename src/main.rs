@@ -70,11 +70,15 @@ fn main() {
     //
     // See Castle enum 
 
-    
+    let bitboard = set_bit!(&[Squares::d6,Squares::g8,Squares::f3,Squares::e5]);
+    render(bitboard);
 
-    let (attacks,masks) = init_slider_attacks(Slider::Bishop);
+    let (b_attacks,b_masks) = init_slider_attacks(Slider::Bishop);
+    let (r_attacks,r_masks) = init_slider_attacks(Slider::Rook);
+
+    render(mask_queen(Squares::d5,&bitboard, &b_masks, &b_attacks, &r_masks, &r_attacks));
+    
     let occupancy = set_bit!(&[Squares::d4]);
-    render_pieces(&bitboards);
 }
 
 

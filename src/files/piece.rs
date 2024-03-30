@@ -2,6 +2,8 @@ use strum_macros::EnumIter;
 
 use crate::files::board::*;
 
+use super::utils::{get_rook_attacks, get_bishop_attacks};
+
 
 pub enum Sides {
     White,
@@ -238,3 +240,8 @@ pub fn mask_rook(sq: Squares) -> u64 {
     }
     attacks
  }
+
+
+pub fn mask_queen(sq:Squares,occupancy:&u64,b_mask:&Vec<u64>,b_attacks:&Vec<u64>,r_mask:&Vec<u64>,r_attacks:&Vec<u64>)-> u64 {
+    get_bishop_attacks(sq, occupancy, b_mask , b_attacks) |  get_rook_attacks(sq, occupancy, r_mask , r_attacks) 
+}
