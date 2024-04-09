@@ -171,7 +171,7 @@ pub fn mask_pawn(sq: Squares, side: Sides) -> u64 {
     }
 }
 
-pub fn mask_knight(sq: Squares) -> u64 {
+pub fn mask_knight(sq: Squares) -> Bitboard {
     let attacks = 1 << sq as u8;
      (attacks & NOT_A_FILE) >> 17
         | (attacks & NOT_A_FILE) << 15
@@ -183,7 +183,7 @@ pub fn mask_knight(sq: Squares) -> u64 {
         | (attacks & NOT_HG_FILE) << 10
 }
 
-pub fn mask_king(sq: Squares) -> u64 {
+pub fn mask_king(sq: Squares) -> Bitboard {
     let attacks = 1 << sq as u8;
      (attacks >> 8 | attacks << 8)
         | (attacks & NOT_A_FILE) >> 9
@@ -195,7 +195,7 @@ pub fn mask_king(sq: Squares) -> u64 {
 }
 
 // Mask Bishop i.e every attack move for squares
-pub fn mask_bishop(sq: Squares, block: u64) -> u64 {
+pub fn mask_bishop(sq: Squares, block: Bitboard) -> Bitboard {
     let mut attacks: u64 = 0;
     let tr = (sq as u8) / 8;
     let tf = (sq as u8) % 8;
@@ -218,7 +218,7 @@ pub fn mask_bishop(sq: Squares, block: u64) -> u64 {
   
 }
 
-pub fn mask_rook(sq: Squares) -> u64 {
+pub fn mask_rook(sq: Squares) -> Bitboard {
     let mut attacks: u64 = 0;
     let tr = (sq as u8) / 8;
     let tf = (sq as u8) % 8;
@@ -242,6 +242,13 @@ pub fn mask_rook(sq: Squares) -> u64 {
  }
 
 
-pub fn mask_queen(sq:Squares,occupancy:&u64,b_mask:&Vec<u64>,b_attacks:&Vec<u64>,r_mask:&Vec<u64>,r_attacks:&Vec<u64>)-> u64 {
-    get_bishop_attacks(sq, occupancy, b_mask , b_attacks) |  get_rook_attacks(sq, occupancy, r_mask , r_attacks) 
+pub fn mask_queen(
+    sq:Squares,
+    occupancy:&Bitboard,
+    b_mask:&Vec<Bitboard>,
+    b_attacks:&Vec<Bitboard>,
+    r_mask:&Vec<Bitboard>,
+    r_attacks:&Vec<Bitboard>
+    ) -> Bitboard {
+        get_bishop_attacks(sq, occupancy, b_mask , b_attacks) |  get_rook_attacks(sq, occupancy, r_mask , r_attacks) 
 }

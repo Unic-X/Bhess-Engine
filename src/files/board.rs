@@ -2,6 +2,7 @@ use std::ops::Shl;
 use crate::{get_bit, files::piece::Piece, get_printable};
 use strum_macros::EnumIter;
 
+pub type Bitboard = u64;
 
 #[allow(non_camel_case_types)]
 #[derive(Copy, Clone,Debug,EnumIter)]
@@ -17,15 +18,15 @@ pub enum Squares {
 }
 
 
-impl Shl<Squares> for u64 {
-        type Output = u64;
+impl Shl<Squares> for Bitboard {
+        type Output = Bitboard;
 
         fn shl(self, square: Squares) -> Self::Output {
             self << square as u8
         }
 }
 
-pub fn render(bitboard:u64){
+pub fn render(bitboard:Bitboard){
  for rank in 0..8 {
         for file in 0..8 {
             //Use ranks and file to convert into Square number
@@ -47,7 +48,7 @@ pub fn render(bitboard:u64){
 
 
 
-pub fn render_pieces(bitboards:&[u64]){
+pub fn render_pieces(bitboards:&[Bitboard]){
     let all_pieces = Piece::gen_all();
     for rank in 0..8 {
         for file in 0..8 {
