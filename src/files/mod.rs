@@ -4,3 +4,4 @@ pub mod piece;
 pub mod board;
 pub mod utils;
 pub mod fen;
+pub mod defs;

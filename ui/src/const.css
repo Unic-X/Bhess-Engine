@@ -1,0 +1,17 @@
+:root{
+
+   
+
+    --t-size: 100px;
+    --white-t:  #F0D8B7;
+    --black-t: #B48764;
+    --bg-color : #202020;
+
+}
+
+@media all and (max-width: 450px) {
+    :root{
+        --tile-size: 50px;
+        
+    }
+}

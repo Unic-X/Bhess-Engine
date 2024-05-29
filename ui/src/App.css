@@ -1,0 +1,19 @@
+@import './const.css';
+@import url('https://fonts.googleapis.com/css2?family=Sofia+Sans&display=swap');
+
+
+html,body,div{
+  margin: 0%;
+  padding: 0;
+  display: grid;
+}
+
+.App {
+  display: grid;
+  place-content: center;
+  height: 100vh; 
+  background: var(--bg-color);
+  font-family: 'Sofia Sans', sans-serif;
+  grid-template-columns: auto 220px;
+
+}
