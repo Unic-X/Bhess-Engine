@@ -1,4 +1,5 @@
 .ranks {
+    margin: 10px;
     color : var(--black-t);
     display: flex;
     flex-direction: column;

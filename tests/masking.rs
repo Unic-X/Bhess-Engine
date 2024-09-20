@@ -1,6 +1,5 @@
-use samaj::piece::{Sides,mask_pawn, mask_knight, mask_king, mask_bishop, mask_rook};
-use samaj::board::{Squares, render};
-use samaj::set_bit;
+use crate::piece::{Sides,mask_pawn, mask_knight, mask_king, mask_bishop, mask_rook};
+use crate::board::{Squares, render};
 
 #[test]
 fn test_pawn_masking() {

@@ -1,17 +1,19 @@
+use std::ops::BitOr;
+
 use strum_macros::EnumIter;
 
 use crate::files::board::*;
 
 use super::utils::{get_rook_attacks, get_bishop_attacks};
 
-
+#[derive(PartialEq, Eq,Hash)]
 pub enum Sides {
     White,
     Black,
 }
 
 /// Types of Pieces
-#[derive(Copy, Clone, PartialEq, Eq, Debug, EnumIter)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug, EnumIter,Hash)]
 pub enum PieceKind{
     King,
     Queen,
@@ -33,11 +35,12 @@ impl PieceKind {
         }
     }
 }
-
+#[derive(PartialEq,Eq,Hash)]
 pub struct Piece{
     pub color : Sides,
     pub kind : PieceKind,
 }
+
 
 impl Piece {
     pub fn index(&self) -> usize{
@@ -101,20 +104,20 @@ impl Piece {
     }
 
     // Get the "simple" character to represent this piece (capitalized based on the piece's color)
-    pub fn simple_char(&self) -> &'static str {
+    pub fn simple_char(&self) -> char {
         match (&self.color, &self.kind) {
-            (Sides::White, PieceKind::Pawn ) => "P",
-            (Sides::White, PieceKind::Knight ) => "N",
-            (Sides::White, PieceKind::Bishop) => "B",
-            (Sides::White, PieceKind::Rook) => "R",
-            (Sides::White, PieceKind::Queen) => "Q",
-            (Sides::White, PieceKind::King) => "K",
-            (Sides::Black, PieceKind::Pawn ) => "p",
-            (Sides::Black, PieceKind::Knight) => "n",
-            (Sides::Black, PieceKind::Bishop) => "b",
-            (Sides::Black, PieceKind::Rook) => "r",
-            (Sides::Black, PieceKind::Queen) => "q",
-            (Sides::Black, PieceKind::King) => "k",
+            (Sides::White, PieceKind::Pawn ) => 'P',
+            (Sides::White, PieceKind::Knight ) => 'N',
+            (Sides::White, PieceKind::Bishop) => 'B',
+            (Sides::White, PieceKind::Rook) => 'R',
+            (Sides::White, PieceKind::Queen) => 'Q',
+            (Sides::White, PieceKind::King) => 'K',
+            (Sides::Black, PieceKind::Pawn ) => 'p',
+            (Sides::Black, PieceKind::Knight) => 'n',
+            (Sides::Black, PieceKind::Bishop) => 'b',
+            (Sides::Black, PieceKind::Rook) => 'r',
+            (Sides::Black, PieceKind::Queen) => 'q',
+            (Sides::Black, PieceKind::King) => 'k',
         }
     }
     pub fn gen_all()->[Self;12]{
@@ -136,12 +139,25 @@ impl Piece {
     }
 }
 
+
+
 #[repr(u8)]
 pub enum Castle{
+    NA = 0,
     WK = 1,
     WQ = 2,
     BK = 4,
     BQ = 8,
+}
+
+
+impl BitOr<Castle> for Castle {
+    type Output = Castle;
+
+    fn bitor(self, castle: Castle) -> Self::Output {
+            self | castle
+        }
+
 }
 
 const NOT_A_FILE: u64 = 18374403900871474942;
