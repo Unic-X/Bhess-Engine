@@ -1,12 +1,7 @@
-use std::{ops::Shl, collections::HashMap};
-use crate::{get_bit, files::piece::Piece, get_printable};
+use std::ops::Shl;
 use strum_macros::EnumIter;
 
-use super::piece::{Sides, Castle};
-
-
-
-pub type Bitboard = u64;
+use crate::Bitboard;
 
 #[allow(non_camel_case_types)]
 #[derive(Copy, Clone,Debug,EnumIter)]
@@ -19,33 +14,6 @@ pub enum Squares {
     a3,b3,c3,d3,e3,f3,g3,h3,
     a2,b2,c2,d2,e2,f2,g2,h2,
     a1,b1,c1,d1,e1,f1,g1,h1,
-}
-
-
-pub struct BoardState{
-    pub bitboards : HashMap<Piece,Bitboard>,
-    pub turn: Sides,
-    pub castle : Castle,
-    pub half_move : u8,
-
-
-}
-
-impl BoardState {
-    pub fn new()->Self{
-        BoardState { 
-            bitboards: {
-                let mut _piece_hashmap = HashMap::new();
-                for piece in Piece::gen_all(){
-                    _piece_hashmap.insert(piece,0);
-                }
-                _piece_hashmap
-            }, 
-            turn: Sides::White, 
-            castle: Castle::WK | Castle::WQ | Castle::BK | Castle::BQ, 
-            half_move: 0 
-        }
-    }
 }
 
 impl Squares {
@@ -142,7 +110,6 @@ impl Squares {
     }
 }
 
-
 impl Shl<Squares> for Bitboard {
         type Output = Bitboard;
 
@@ -150,61 +117,3 @@ impl Shl<Squares> for Bitboard {
             self << square as u8
         }
 }
-
-pub fn render(bitboard:Bitboard){
- for rank in 0..8 {
-        for file in 0..8 {
-            //Use ranks and file to convert into Square number
-            let square = rank * 8 + file;
-            
-            if file == 0 {
-                print!(" {} ", 8 - rank);
-            }
-            print!(" {}",get_printable!(square, bitboard));
-
-        }
-        print!("\n");
-    }
-    print!("\n    a b c d e f g h \n");
-    
-    //Board state in u64 Decimal 
-    print!("Biboard : {bitboard} \n");
-}
-
-
-
-pub fn render_pieces(bitboards:&[Bitboard]){
-    let all_pieces = Piece::gen_all();
-    for rank in 0..8 {
-        for file in 0..8 {
-            //Use ranks and file to convert into Square number
-            let square = rank * 8 + file;
-            
-            if file == 0 {
-                print!(" {} ", 8 - rank);
-            }
-            
-            let mut piece = None;
-
-            for bb_piece in &all_pieces{
-                if get_bit!(square, bitboards[bb_piece.index()]) {
-                    piece = Some(bb_piece);
-                }
-            }
-
-            match piece {
-                Some(p) => {
-                    print!(" {}",p.simple_char());
-                }
-                None => {
-                    print!(" .");
-                }
-            }
-           
-        }
-        print!("\n");
-    }
-    print!("\n    a b c d e f g h \n");
-    
-}
-

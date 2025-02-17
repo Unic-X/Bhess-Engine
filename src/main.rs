@@ -1,5 +1,14 @@
-pub mod files;
-use crate::files::{utils::*,board::*,piece::*};
+mod position;
+mod utils;
+mod piece;
+mod defs;
+  
+use std::time::{Instant, SystemTime};
+
+use position::*;
+use defs::*;
+use piece::*;
+use utils::{magic::*,*};
 
 #[allow(unused_variables)]
 fn main() {
@@ -13,13 +22,16 @@ fn main() {
 
     let bitboard = set_bit!(&[Squares::d6,Squares::g8,Squares::f3,Squares::e5]);
     render(bitboard);
-
+    
     let (b_attacks,b_masks) = init_slider_attacks(Slider::Bishop);
     let (r_attacks,r_masks) = init_slider_attacks(Slider::Rook);
-
-    render(mask_queen(Squares::d5,&bitboard, &b_masks, &b_attacks, &r_masks, &r_attacks));
-    
-    let occupancy = set_bit!(&[Squares::d4]);
+    let duration_since_epoch = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
+    let start = Instant::now();
+    // let rook_bitboard = get_rook_attacks(Squares::f6,&bitboard,&r_masks, &r_attacks);
+    let pawn_bitboard = attacks::mask_pawn(Squares::e2, Sides::White);
+    let elapsed = start.elapsed();
+    render(pawn_bitboard);
+    println!("mask_queen execution time: {:?}", elapsed);
 }
 
 

@@ -1,3 +1,14 @@
+/// Set the bit for the bitboard the macro defines two 
+/// ways to set the bitboard 
+/// 1. Set using vec of squares on the empty bitboard
+/// ```
+/// set_bit!(vec![Squares::e3,Squares::d2]);
+/// ```
+/// 2. Set using squares on existing bitboard this may mutate the bitboard
+/// ```
+/// set_bit!(vec![Squares::e3,Squares::d2],1020200102020);
+/// ```
+
 #[macro_export]
 macro_rules! set_bit {
    
@@ -5,7 +16,7 @@ macro_rules! set_bit {
          { 
         let mut bitboard:u64 = 0; 
          for square in $squares {
-            bitboard |=  1<< *square;          
+            bitboard |=  1 << *square;          
          }
          bitboard 
          } 
