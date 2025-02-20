@@ -1,10 +1,10 @@
-use std::ops::Shl;
+use std::{ops::Shl, str::FromStr};
 use strum_macros::EnumIter;
 
 use crate::Bitboard;
 
 #[allow(non_camel_case_types)]
-#[derive(Copy, Clone,Debug,EnumIter)]
+#[derive(Copy, Clone,Debug,EnumIter,PartialEq)]
 pub enum Squares {
     a8,b8,c8,d8,e8,f8,g8,h8,
     a7,b7,c7,d7,e7,f7,g7,h7,
@@ -14,6 +14,39 @@ pub enum Squares {
     a3,b3,c3,d3,e3,f3,g3,h3,
     a2,b2,c2,d2,e2,f2,g2,h2,
     a1,b1,c1,d1,e1,f1,g1,h1,
+}
+
+impl FromStr for Squares{
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "a8" => Ok(Squares::a8), "b8" => Ok(Squares::b8), "c8" => Ok(Squares::c8), "d8" => Ok(Squares::d8),
+            "e8" => Ok(Squares::e8), "f8" => Ok(Squares::f8), "g8" => Ok(Squares::g8), "h8" => Ok(Squares::h8),
+
+            "a7" => Ok(Squares::a7), "b7" => Ok(Squares::b7), "c7" => Ok(Squares::c7), "d7" => Ok(Squares::d7),
+            "e7" => Ok(Squares::e7), "f7" => Ok(Squares::f7), "g7" => Ok(Squares::g7), "h7" => Ok(Squares::h7),
+
+            "a6" => Ok(Squares::a6), "b6" => Ok(Squares::b6), "c6" => Ok(Squares::c6), "d6" => Ok(Squares::d6),
+            "e6" => Ok(Squares::e6), "f6" => Ok(Squares::f6), "g6" => Ok(Squares::g6), "h6" => Ok(Squares::h6),
+
+            "a5" => Ok(Squares::a5), "b5" => Ok(Squares::b5), "c5" => Ok(Squares::c5), "d5" => Ok(Squares::d5),
+            "e5" => Ok(Squares::e5), "f5" => Ok(Squares::f5), "g5" => Ok(Squares::g5), "h5" => Ok(Squares::h5),
+
+            "a4" => Ok(Squares::a4), "b4" => Ok(Squares::b4), "c4" => Ok(Squares::c4), "d4" => Ok(Squares::d4),
+            "e4" => Ok(Squares::e4), "f4" => Ok(Squares::f4), "g4" => Ok(Squares::g4), "h4" => Ok(Squares::h4),
+
+            "a3" => Ok(Squares::a3), "b3" => Ok(Squares::b3), "c3" => Ok(Squares::c3), "d3" => Ok(Squares::d3),
+            "e3" => Ok(Squares::e3), "f3" => Ok(Squares::f3), "g3" => Ok(Squares::g3), "h3" => Ok(Squares::h3),
+
+            "a2" => Ok(Squares::a2), "b2" => Ok(Squares::b2), "c2" => Ok(Squares::c2), "d2" => Ok(Squares::d2),
+            "e2" => Ok(Squares::e2), "f2" => Ok(Squares::f2), "g2" => Ok(Squares::g2), "h2" => Ok(Squares::h2),
+
+            "a1" => Ok(Squares::a1), "b1" => Ok(Squares::b1), "c1" => Ok(Squares::c1), "d1" => Ok(Squares::d1),
+            "e1" => Ok(Squares::e1), "f1" => Ok(Squares::f1), "g1" => Ok(Squares::g1), "h1" => Ok(Squares::h1),
+
+            _ => Err(format!("Invalid square: {}", s)),
+        }
+    }
 }
 
 impl Squares {
@@ -95,11 +128,14 @@ impl Squares {
             _ => None, // Out of bounds
         }
     }
+    pub fn rank(&self)->u8{
+        (*self as u8) / 8 + 1
+    }
 
     // Generic function to convert any unsigned integer to Squares
     pub fn from<T>(sq: T) -> Option<Self>
     where
-        T: Into<u64>, // Convert into u64 to handle large types
+        T: Into<u64>,     
     {
         let value = sq.into();
         if value < 64 {

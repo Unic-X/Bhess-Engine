@@ -9,6 +9,10 @@ pub const NOT_HG_FILE: u64 = 4557430888798830399;
 // not AB file constant
 pub const NOT_AB_FILE: u64 = 18229723555195321596;
 
+pub const FEN_NUM_PARTS: usize = 6;
+
+pub const START_POS_FEN: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
 pub const BISHOP_RELEVANT_BITS: [u8;64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 
     5, 5, 5, 5, 5, 5, 5, 5, 
@@ -33,3 +37,5 @@ pub const ROOK_REVEVANT_BITS: [u8;64] = [
     11, 10, 10, 10, 10, 10, 10, 11, 
     12, 11, 11, 11, 11, 11, 11, 12
 ];
+
+
