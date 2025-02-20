@@ -1,4 +1,4 @@
-use std::ops::{BitOr, Not};
+use std::ops::{BitOr, BitXorAssign, Not};
 
 #[derive(Debug)]
 #[repr(u8)]
@@ -9,6 +9,7 @@ pub enum Castle{
     BK = 4,
     BQ = 8,
 }
+
 
 impl Castle {
     pub fn from_bits(bits: u8) -> Self {
@@ -22,8 +23,14 @@ impl Castle {
         }
     }
 
-    pub fn bits(self) -> u8 {
-        self as u8
+    pub fn bits(&self) -> u8 {
+        match self {
+            &Castle::NA => 0,
+            &Castle::WK => 1,
+            &Castle::WQ => 2,
+            &Castle::BK => 4,
+            &Castle::BQ => 8,
+        }
     }
 }
 
@@ -37,7 +44,17 @@ impl Not for Castle{
 impl BitOr<Castle> for Castle {
     type Output = Castle;
 
-    fn bitor(self, castle: Castle) -> Self::Output {
-        Self::from_bits(self.bits() | castle.bits())
+    fn bitor(self, other: Castle) -> Self::Output {
+        Self::from_bits(self as u8 | other as u8)
     }
 }
+
+impl BitXorAssign for Castle{
+    fn bitxor_assign(&mut self, rhs: Self) {
+        *self = Self::from_bits(self.bits() ^ rhs.bits())
+    }
+}
+
+
+pub struct CastleRights(Castle);
+

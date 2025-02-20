@@ -99,8 +99,7 @@ impl Squares {
     // Generic function to convert any unsigned integer to Squares
     pub fn from<T>(sq: T) -> Option<Self>
     where
-        T: Into<u64>, // Convert into u64 to handle large types
-    {
+        T: Into<u64>,     {
         let value = sq.into();
         if value < 64 {
             Squares::from_u8(value as u8)

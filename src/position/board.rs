@@ -1,29 +1,14 @@
-use crate::get_printable;
+use crate::{get_printable, piece::Piece};
+use crate::Squares;
 
 pub type Bitboard = u64;
 
-pub struct Board{
-    pieces: [Bitboard; 12],
-}
+pub struct Board([Bitboard;12]);
 
 #[derive(PartialEq, Eq,Hash)]
 pub enum Sides {
     White,
     Black,
-}
-
-impl Board {
-    pub fn new()->Self{
-        Board { 
-             pieces : [0;12]
-        }
-    }   
-    pub fn render_all(&self){
-        for boards in self.pieces {
-            render(boards);
-        }   
-    }
-    
 }
 
 pub fn render(bitboard:Bitboard){
@@ -46,4 +31,14 @@ pub fn render(bitboard:Bitboard){
     print!("Biboard : {bitboard} \n");
 }
 
-
+impl Board {
+    pub fn empty()->Self{
+        Board([0;12])
+    }
+    pub fn put_piece(&mut self, piece: Piece, square: Option<Squares>) {
+        match square {
+            Some(square) => {self.0[piece.index()] |= square as u64} 
+            None => {eprintln!("put_piece: Imagine being so retard: Square is out of bounds")}
+        };
+    }
+}

@@ -6,7 +6,6 @@ mod defs;
 use std::time::{Instant, SystemTime};
 
 use position::*;
-use defs::*;
 use piece::*;
 use utils::{magic::*,*};
 
