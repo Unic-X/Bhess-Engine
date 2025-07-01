@@ -1,18 +1,14 @@
 use std::ops::{BitOr, BitOrAssign, Not};
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug, PartialEq)]
 #[repr(u8)]
-pub enum Castle{
-    NA = 0,
+pub enum Castle {
+    NA = 0, //None
     WK = 1,
     WQ = 2,
     BK = 4,
     BQ = 8,
 }
-
-// WQ BK 
-// 
-
 
 impl Castle {
     pub fn from_bits(bits: u8) -> Self {
@@ -36,14 +32,23 @@ impl Castle {
         }
     }
 
-    pub fn all() -> u8 {
-        (Castle::WK | Castle::BK | Castle::WQ | Castle::BQ) as u8
+    pub fn from(pos: &[Self]) -> Self {
+        let bits = pos.iter().fold(0u8, |acc, x| acc | x.bits());
+        Self::from_bits(bits)
+    }
+
+    pub fn all() -> Castle {
+        Castle::WK | Castle::BK | Castle::WQ | Castle::BQ
+    }
+
+    pub fn none() -> u8 {
+        Castle::NA as u8
     }
 }
 
-impl Not for Castle{
+impl Not for Castle {
     type Output = Self;
-    fn not(self)->Self::Output {
+    fn not(self) -> Self::Output {
         Self::from_bits(!self.bits())
     }
 }
@@ -56,12 +61,18 @@ impl BitOr<Castle> for Castle {
     }
 }
 
-impl BitOrAssign for Castle{
+impl BitOrAssign for Castle {
     fn bitor_assign(&mut self, rhs: Self) {
         *self = Self::from_bits(self.bits() | rhs.bits())
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct CastleRights(pub Castle);
 
+impl CastleRights {
+    pub fn none() -> Self {
+        println!("Here");
+        todo!()
+    }
+}

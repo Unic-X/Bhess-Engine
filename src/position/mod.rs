@@ -1,12 +1,11 @@
-mod castling;
 mod board;
+mod castling;
 mod fen;
 mod square;
 
 pub use board::*;
 pub use castling::CastleRights;
 pub use square::Squares;
-
 
 #[derive(Debug)]
 pub struct Position {

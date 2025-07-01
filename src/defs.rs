@@ -13,6 +13,8 @@ pub const FEN_NUM_PARTS: usize = 6;
 
 pub const START_POS_FEN: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
+pub const COMPLEX_POS_FEN : &str = "4k2r/6r1/8/8/8/8/3R4/R3K3 w Qk - 0 1";
+
 pub const BISHOP_RELEVANT_BITS: [u8;64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 
     5, 5, 5, 5, 5, 5, 5, 5, 
