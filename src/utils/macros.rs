@@ -14,7 +14,7 @@ macro_rules! set_bit {
     ($squares:expr) => {{
         let mut bitboard: u64 = 0;
         for square in $squares {
-            bitboard |= 1 << *square;
+            bitboard |= 1 << square;
         }
         bitboard
     }};

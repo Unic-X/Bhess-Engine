@@ -7,23 +7,15 @@ use position::*;
 use utils::*;
 use std::str::FromStr;
 
-use crate::piece::attacks::mask_knight;
-use crate::piece::Piece;
-
 #[allow(unused_variables)]
-fn main() {
 
+fn main() {
     let position = Position::from_str(defs::COMPLEX_POS_FEN);
-    let bitboard: u64 = 0;
     match position {
-        Ok(pos) => {
-            let bitboard = pos.board;
-            println!("{:?}", pos.colour_to_move);
-            render(bitboard.0[1]);
+        Ok(pos) => {//time this
+            pos.render_fancy();
         }
         Err(_) => {}
     }
-
-
-
+    
 }

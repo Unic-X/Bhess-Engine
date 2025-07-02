@@ -13,8 +13,9 @@ pub const FEN_NUM_PARTS: usize = 6;
 
 pub const START_POS_FEN: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-pub const COMPLEX_POS_FEN : &str = "4k2r/6r1/8/8/8/8/3R4/R3K3 w Qk - 0 1";
+pub const COMPLEX_POS_FEN : &str = "6k1/5p1p/6p1/3pB3/b5PP/4P1K1/p3NP2/r7 b - - 1 40";
 
+#[rustfmt::skip]
 pub const BISHOP_RELEVANT_BITS: [u8;64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 
     5, 5, 5, 5, 5, 5, 5, 5, 
@@ -29,6 +30,7 @@ pub const BISHOP_RELEVANT_BITS: [u8;64] = [
 
 
 /// Rook relevant occupancy bit count for every square on board
+#[rustfmt::skip]
 pub const ROOK_REVEVANT_BITS: [u8;64] = [
     12, 11, 11, 11, 11, 11, 11, 12, 
     11, 10, 10, 10, 10, 10, 10, 11, 
