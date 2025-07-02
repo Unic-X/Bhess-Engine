@@ -17,7 +17,7 @@ use crate::utils::Slider;
 /// Magic numbers for the Rook
 
 /// PRNG using bitshifts
-///
+
 pub fn get_random_64() -> u64 {
     let n1 = random::<u64>() & 0xFFFF;
     let n2 = random::<u64>() & 0xFFFF;
@@ -74,7 +74,7 @@ pub fn ratt(sq: u8, block: u64) -> u64 {
     result
 }
 
-///Generate attack for bishop
+///Generate attack for a bishop
 ///https://www.chessprogramming.org/Magic_Bitboards
 
 pub fn batt(sq: u8, block: u64) -> u64 {

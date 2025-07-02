@@ -18,7 +18,7 @@ impl Castle {
             2 => Castle::WQ,
             4 => Castle::BK,
             8 => Castle::BQ,
-            _ => Castle::NA, // Default case for combined bits
+            _ => Castle::NA, // Default case for none bits
         }
     }
 
@@ -41,8 +41,8 @@ impl Castle {
         Castle::WK | Castle::BK | Castle::WQ | Castle::BQ
     }
 
-    pub fn none() -> u8 {
-        Castle::NA as u8
+    pub fn none() -> Self {
+        Castle::NA
     }
 }
 
@@ -63,16 +63,29 @@ impl BitOr<Castle> for Castle {
 
 impl BitOrAssign for Castle {
     fn bitor_assign(&mut self, rhs: Self) {
-        *self = Self::from_bits(self.bits() | rhs.bits())
+        *self = Self::from_bits(self.bits() | rhs.bits()) // BUG: from bits only works for a single castle pos
     }
 }
 
 #[derive(Debug, PartialEq)]
 pub struct CastleRights(pub Castle);
 
+
 impl CastleRights {
-    pub fn none() -> Self {
-        println!("Here");
-        todo!()
+    pub fn bits(&self) -> u8 {
+        self.0.bits()
+    }
+
+    pub fn contains(&self, flag: Castle) -> bool {
+        self.bits() & flag.bits() != 0
+    }
+
+    pub fn insert(&mut self, flag: Castle) {
+        self.0 |= flag;
+    }
+
+    pub fn remove(&mut self, flag: Castle) {
+        let bits = self.bits() & !flag.bits();
+        self.0 = Castle::from_bits(bits);
     }
 }

@@ -37,8 +37,8 @@ pub fn mask_king(sq: Squares) -> Bitboard {
 }
 
 /// Attacks for Slider pieces
-
 /// Don't use this: Compute Brute force attack for a Bishop piece
+/// Instead uses the precomputed `get_bishop_attacks`
 pub fn mask_bishop(sq: Squares, block: Bitboard) -> Bitboard {
     let mut attacks: u64 = 0;
     let tr = (sq as u8) / 8;
@@ -61,7 +61,7 @@ pub fn mask_bishop(sq: Squares, block: Bitboard) -> Bitboard {
     attacks
 }
 
-/// Don't use this:  Compute Brute force attack for Rook piece
+/// Don't use this: Compute Brute force attack for a Rook piece
 pub fn mask_rook(sq: Squares) -> Bitboard {
     let mut attacks: u64 = 0;
     let tr = (sq as u8) / 8;
