@@ -1,4 +1,4 @@
-use crate::defs::FEN_NUM_PARTS;
+use crate::defs::{FEN_NUM_PARTS, PIECE_VALUES};
 use crate::piece::Piece;
 use crate::position::{Bitboard, Position};
 use crate::position::Squares;
@@ -8,19 +8,17 @@ use crate::Sides;
 use super::castling::Castle;
 use super::CastleRights;
 
-const WHITE_SIDE: Sides = Sides::White;
-const BLACK_SIDE: Sides = Sides::Black;
 
 impl Position {
     pub fn new() -> Self {
         Position {
             boards: Board::empty_bitboards(),
-            colour_to_move: WHITE_SIDE,
+            colour_to_move: Sides::White,
             castling_rights: CastleRights(Castle::all()),
             en_passant_square: None,
             half_move_clock: 0,
-            full_move_counter: 1,
-            material_score : [0.0;2]
+            full_move_counter: 0,
+            material_score: [0.0, 0.0],
         }
     }
 
@@ -50,8 +48,8 @@ impl Position {
         println!("En passant: {:?}",self.en_passant_square);
         println!("Half move clock: {}",self.half_move_clock);
         println!("Full move counter: {}",self.full_move_counter);
-        println!("Material score: {:?}",self.material_score);
         println!("Colour to move: {:?}",self.colour_to_move);
+        println!("Material score: {:?}",self.material_score);
     }
 
     fn parse_bitboards(str: &str) -> Result<[Bitboard;12], String> {
@@ -74,18 +72,18 @@ impl Position {
                 continue;
             }
             let piece = match char {
-                'P' => Piece::pawn(WHITE_SIDE),
-                'N' => Piece::knight(WHITE_SIDE),
-                'B' => Piece::bishop(WHITE_SIDE),
-                'R' => Piece::rook(WHITE_SIDE),
-                'Q' => Piece::queen(WHITE_SIDE),
-                'K' => Piece::king(WHITE_SIDE),
-                'p' => Piece::pawn(BLACK_SIDE),
-                'n' => Piece::knight(BLACK_SIDE),
-                'b' => Piece::bishop(BLACK_SIDE),
-                'r' => Piece::rook(BLACK_SIDE),
-                'q' => Piece::queen(BLACK_SIDE),
-                'k' => Piece::king(BLACK_SIDE),
+                'P' => Piece::pawn(Sides::White),
+                'N' => Piece::knight(Sides::White),
+                'B' => Piece::bishop(Sides::White),
+                'R' => Piece::rook(Sides::White),
+                'Q' => Piece::queen(Sides::White),
+                'K' => Piece::king(Sides::White),
+                'p' => Piece::pawn(Sides::Black),
+                'n' => Piece::knight(Sides::Black),
+                'b' => Piece::bishop(Sides::Black),
+                'r' => Piece::rook(Sides::Black),
+                'q' => Piece::queen(Sides::Black),
+                'k' => Piece::king(Sides::Black),
                 _ => return Err(format!("invalid piece '{char}'")),
             };
 
@@ -148,16 +146,32 @@ impl Position {
 
         let square = result?;
 
-        println!("{:?}", square.rank());
-        if square.rank() != 2 || square.rank() != 5 {
+        let rank = square.rank();
+        
+       if !(rank == 3 || rank == 6) {
             return Err("invalid en passant square".to_string());
         }
 
         Ok(Some(square))
     }
 
-    fn calculate_score() -> [f64;2] {
-        [0.0,0.0]
+    pub fn calculate_score(&mut self) {
+        let mut white_material = 0.0;
+        let mut black_material = 0.0;
+
+        let bb_w = &self.boards[0..6];
+        let bb_b = &self.boards[6..12];
+
+        for (piece_type, (w, b)) in bb_w.iter().zip(bb_b.iter()).enumerate() {
+            let white_pieces = *w;
+            let black_pieces = *b;
+
+
+            white_material += white_pieces.count_ones() as f64 * PIECE_VALUES[piece_type];
+            black_material += black_pieces.count_ones() as f64 * PIECE_VALUES[piece_type];
+        }
+
+        self.material_score = [white_material, black_material];
     }
 }
 
@@ -174,17 +188,20 @@ impl std::str::FromStr for Position {
             ));
         }
 
-        let score = Self::calculate_score();
-
-        Ok(Position {
+        let mut pos = Position {
             boards: Self::parse_bitboards(parts[0])?,
             colour_to_move: Self::parse_colour_to_move(parts[1])?,
             castling_rights: Self::parse_castling_rights(parts[2])?,
             en_passant_square: Self::parse_en_passant_square(parts[3])?,
             half_move_clock: parts[4].parse().unwrap(),
             full_move_counter: parts[5].parse().unwrap(),
-            material_score : score
-        })
+            material_score: [0.0, 0.0],
+        };
+
+        pos.calculate_score();
+
+        Ok(pos)
+        
     }
 
 
@@ -296,9 +313,9 @@ mod tests {
 
     #[test]
     fn parse_with_en_passant_square_6th_rank() {
-        let parse = "rnbqkbnr/ppp1pppp/8/4pp2/8/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2".parse::<Position>();
-
-        assert_eq!(parse.unwrap().en_passant_square, Some(parse_square("d6")));
+        let parse: Result<Position, String> = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1".parse::<Position>();
+        let res = parse.unwrap();
+        assert_eq!(res.en_passant_square, Some(parse_square("e3")));
     }
 
     #[test]

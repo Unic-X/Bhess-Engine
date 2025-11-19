@@ -8,5 +8,5 @@ pub struct Position {
     pub en_passant_square: Option<Squares>,
     pub half_move_clock: u8,
     pub full_move_counter: u8,
-    pub material_score : [f64;2],
+    pub material_score: [f64;2],
 }

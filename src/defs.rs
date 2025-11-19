@@ -15,6 +15,11 @@ pub const START_POS_FEN: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w K
 
 pub const COMPLEX_POS_FEN : &str = "6k1/5p1p/6p1/3pB3/b5PP/4P1K1/p3NP2/r7 b - - 1 40";
 
+pub const PIECE_VALUES: [f64; 12] = [
+    1.0, 3.0, 3.0, 5.0, 9.0, 0.0,
+    1.0, 3.0, 3.0, 5.0, 9.0, 0.0,
+];
+
 #[rustfmt::skip]
 pub const BISHOP_RELEVANT_BITS: [u8;64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 

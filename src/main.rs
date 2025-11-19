@@ -5,17 +5,26 @@ mod utils;
 
 use position::*;
 use utils::*;
-use std::str::FromStr;
+
+use crate::{
+    piece::attacks::get_bishop_attacks,
+    utils::magic::init_slider_attacks,
+};
 
 #[allow(unused_variables)]
 
 fn main() {
-    let position = Position::from_str(defs::COMPLEX_POS_FEN);
-    match position {
-        Ok(pos) => {//time this
-            pos.render_fancy();
-        }
-        Err(_) => {}
-    }
+    let bitboard = set_bit!(vec![Squares::d6, Squares::g8, Squares::f3, Squares::e5]);
+    let (b_attacks, b_masks) = init_slider_attacks(Slider::Bishop);
+
+    let (r_attacks, r_masks) = init_slider_attacks(Slider::Rook);
+
+    get_bishop_attacks(
+        Squares::d5,
+        &bitboard,
+        &b_masks,
+        &b_attacks,
+    );
+
     
 }

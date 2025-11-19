@@ -1,7 +1,6 @@
 use crate::defs::{NOT_A_FILE, NOT_H_FILE};
 use crate::piece::piecekind::PieceKind;
 use crate::position::{Sides, Squares};
-use crate::precompute_moves;
 
 #[derive(PartialEq, Eq, Hash)]
 pub struct Piece {
